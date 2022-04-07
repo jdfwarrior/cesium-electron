@@ -1,16 +1,18 @@
-const { BrowserWindow } = require('electron')
+const { BrowserWindow, app } = require('electron')
+const path = require('path')
 const express = require('express')
-const app = express()
+const server = express()
 
-app.use(express.json())
+server.use(express.json())
 
-app.post('/czml', (request, response) => {
+server.post('/czml', (request, response) => {
     const [win] = BrowserWindow.getAllWindows()
     if (!win) return
     win.webContents.send('czml', request.body)
     response.json({ status: 'ok' })
 })
 
-app.use('/', express.static('./dist'))
+const staticPath = path.resolve(path.join(app.getAppPath(), '..', 'dist'))
+server.use('/', express.static(staticPath))
 
-app.listen(3001, () => console.log(`express server running on port 3001`))
+server.listen(3001, () => console.log(`express server running on port 3001`))
