@@ -46,6 +46,8 @@ export const useCesium = () => {
       fullscreenButton: false,
       animation: false,
       shouldAnimate: true,
+      targetFrameRate: 24,
+      requestRenderMode: true
     });
 
     home();
