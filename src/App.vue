@@ -26,16 +26,6 @@ onMounted(() => {
 
 <template>
   <the-header />
-  <the-toolbar class="text-xs">
-    <toolbar-button @click="cesium.home"><icon-home /></toolbar-button>
-  </the-toolbar>
-
-  <the-toolbar bottom left class="text-xs">
-    <toolbar-button>
-      <icon-play v-if="isPlaying" @click="cesium.pause" />
-      <icon-pause v-else @click="cesium.play" />
-    </toolbar-button>
-  </the-toolbar>
 
   <the-toolbar bottom right class="tabular-nums text-xs">
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
@@ -62,7 +52,13 @@ onMounted(() => {
 }
 
 .cesium-timeline-main {
-  @apply bg-gray-900 bg-opacity-70;
+  @apply bg-gray-900 bg-opacity-0 hover:bg-opacity-70 backdrop-filter backdrop-blur-sm;
+  transition: all 0.3s ease-in;
+  border: none !important;
+}
+
+.cesium-timeline-trackContainer {
+  border-top: none !important;
 }
 
 .cesium-timeline-bar {

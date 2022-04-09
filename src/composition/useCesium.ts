@@ -25,13 +25,14 @@ const defaultView = {
   },
 };
 
+let viewer: Viewer | undefined = undefined;
+let datasource = new CzmlDataSource("entities");
+const mouseLatitude = ref(0);
+const mouseLongitude = ref(0);
+const isPlaying = ref(true);
+const currentTime = ref("");
+
 export const useCesium = () => {
-  let viewer: Viewer | undefined = undefined;
-  let datasource = new CzmlDataSource("entities");
-  const mouseLatitude = ref(0);
-  const mouseLongitude = ref(0);
-  const isPlaying = ref(true);
-  const currentTime = ref("");
 
   const init = (id: string) => {
     console.log("loading cesium...");
@@ -107,6 +108,10 @@ export const useCesium = () => {
     isPlaying.value = false;
   }
 
+  function clear() {
+    datasource.entities.removeAll()
+  }
+
   function watchMousePosition() {
     if (!viewer) throw new Error(`No viewer instance available`);
 
@@ -160,6 +165,7 @@ export const useCesium = () => {
     isPlaying,
     play,
     pause,
+    clear,
     currentTime,
   };
 };
