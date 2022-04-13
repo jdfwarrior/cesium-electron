@@ -41,17 +41,29 @@ function onExit() {
 #header {
   @apply absolute top-0 left-0 right-0 z-2;
   @apply flex justify-start items-center;
-  @apply bg-gray-900 bg-opacity-0 hover:bg-opacity-70 backdrop-filter hover:backdrop-blur-md;
-  @apply text-transparent hover:text-gray-400;
+  @apply bg-gray-900 bg-opacity-0 backdrop-filter backdrop-blur-sm;
+  @apply text-transparent;
   height: 30px;
   font-size: 10px;
   -webkit-app-region: drag;
   transition: all 0.3s ease-in;
 }
 
+#header:hover {
+  @apply text-gray-400 bg-opacity-70;
+}
+
 .action-button {
-  @apply px-2 py-1 hover:bg-gray-900 rounded-full focus:outline-none;
+  @apply px-2 py-1 rounded-full;
   cursor: pointer;
+}
+
+.action-button:hover {
+  @apply bg-gray-900;
+}
+
+.action-button:focus {
+  @apply outline-none;
 }
 
 .action-button:disabled {

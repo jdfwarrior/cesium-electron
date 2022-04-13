@@ -52,9 +52,13 @@ onMounted(() => {
 }
 
 .cesium-timeline-main {
-  @apply bg-gray-900 bg-opacity-0 hover:bg-opacity-70 backdrop-filter backdrop-blur-sm;
+  @apply bg-gray-900 bg-opacity-0 backdrop-filter backdrop-blur-sm;
   transition: all 0.3s ease-in;
   border: none !important;
+}
+
+.cesium-timeline-main:hover {
+  @apply bg-opacity-70;
 }
 
 .cesium-timeline-trackContainer {
