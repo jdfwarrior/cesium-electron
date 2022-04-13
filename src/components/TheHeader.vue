@@ -68,6 +68,6 @@ function onExit() {
 
 .window-control {
   @apply w-2 h-2 rounded-full bg-slate-700;
-  -webkit-app-region: drag;
+  -webkit-app-region: none;
 }
 </style>
