@@ -47,6 +47,10 @@ onMounted(() => {
   right: 0;
 }
 
+#cesium {
+  top: 30px;
+}
+
 .cesium-viewer-bottom {
   display: none !important;
 }

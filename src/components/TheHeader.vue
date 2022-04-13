@@ -22,7 +22,7 @@ function onExit() {
 
 <template>
   <header id="header">
-    <div class="w-1/3 px-3 flex items-center space-x-3">
+    <div class="w-1/3 px-3 flex items-center space-x-2">
       <button class="action-button" @click="cesium.home">Home</button>
       <button class="action-button" @click="cesium.play" v-if="!isPlaying">Play</button>
       <button class="action-button" @click="cesium.pause" v-else>Pause</button>
@@ -41,20 +41,15 @@ function onExit() {
 #header {
   @apply absolute top-0 left-0 right-0 z-2;
   @apply flex justify-start items-center;
-  @apply bg-gray-900 bg-opacity-0 backdrop-filter backdrop-blur-sm;
-  @apply text-transparent;
+  @apply bg-gray-800 text-gray-400;
   height: 30px;
   font-size: 10px;
   -webkit-app-region: drag;
   transition: all 0.3s ease-in;
 }
 
-#header:hover {
-  @apply text-gray-400 bg-opacity-70;
-}
-
 .action-button {
-  @apply px-2 py-1 rounded-full;
+  @apply px-2 py-1 rounded;
   cursor: pointer;
 }
 
