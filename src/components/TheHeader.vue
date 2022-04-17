@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import { useCesium } from '../composition/useCesium'
+import { useCesium } from "@/composition/useCesium";
+import { useHotkey } from "@/composition/useHotkey";
 
-const cesium = useCesium()
-const { isPlaying } = cesium
+const cesium = useCesium();
+const { isPlaying } = cesium;
+
+useHotkey("Ctrl + H", cesium.home);
+useHotkey("Ctrl + Backspace", cesium.clear);
 
 function onMinimize() {
   if (!window?.electron) return;
@@ -24,15 +28,29 @@ function onExit() {
   <header id="header">
     <div class="w-1/3 px-3 flex items-center space-x-2">
       <button class="action-button" @click="cesium.home">Home</button>
-      <button class="action-button" @click="cesium.play" v-if="!isPlaying">Play</button>
+      <button class="action-button" @click="cesium.play" v-if="!isPlaying">
+        Play
+      </button>
       <button class="action-button" @click="cesium.pause" v-else>Pause</button>
       <button class="action-button" @click="cesium.clear">Clear</button>
     </div>
     <div class="flex-grow text-center"></div>
     <div class="w-1/3 flex space-x-2 justify-end items-center px-3">
-      <button title="Minimize" @click="onMinimize" class="window-control hover:bg-amber-300"></button>
-      <button title="Maximize" @click="onMaximize" class="window-control hover:bg-green-300"></button>
-      <button title="Exit" @click="onExit" class="window-control hover:bg-red-500"></button>
+      <button
+        title="Minimize"
+        @click="onMinimize"
+        class="window-control hover:bg-amber-300"
+      ></button>
+      <button
+        title="Maximize"
+        @click="onMaximize"
+        class="window-control hover:bg-green-300"
+      ></button>
+      <button
+        title="Exit"
+        @click="onExit"
+        class="window-control hover:bg-red-500"
+      ></button>
     </div>
   </header>
 </template>
