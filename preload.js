@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require("electron");
+const { contextBridge, ipcRenderer, MenuItem } = require("electron");
 
 contextBridge.exposeInMainWorld("electron", {
   // add stuff in here to expose functionality from nodejs or electron to the renderer process
@@ -10,4 +10,5 @@ contextBridge.exposeInMainWorld("electron", {
   maximize: () => ipcRenderer.invoke("maximize"),
   restore: () => ipcRenderer.invoke("restore"),
   exit: () => ipcRenderer.invoke("exit"),
+  context: (menu, payload) => ipcRenderer.invoke("context", { menu, payload }),
 });

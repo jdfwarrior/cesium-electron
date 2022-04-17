@@ -25,15 +25,15 @@ const defaultView = {
   },
 };
 
-let viewer: Viewer | undefined = undefined;
+let viewer: Viewer | undefined;
 let datasource = new CzmlDataSource("entities");
+let defaultScreenSpaceHandler: ScreenSpaceEventHandler | undefined;
 const mouseLatitude = ref(0);
 const mouseLongitude = ref(0);
 const isPlaying = ref(true);
 const currentTime = ref("");
 
 export const useCesium = () => {
-
   const init = (id: string) => {
     console.log("loading cesium...");
 
@@ -47,12 +47,16 @@ export const useCesium = () => {
       animation: false,
       shouldAnimate: true,
       targetFrameRate: 24,
-      requestRenderMode: true
+      requestRenderMode: true,
     });
 
     home();
 
     viewer.dataSources.add(datasource);
+
+    defaultScreenSpaceHandler = new ScreenSpaceEventHandler(
+      viewer.scene.canvas
+    );
 
     watchMousePosition();
     watchClock();
@@ -111,7 +115,7 @@ export const useCesium = () => {
   }
 
   function clear() {
-    datasource.entities.removeAll()
+    datasource.entities.removeAll();
   }
 
   function watchMousePosition() {
@@ -155,6 +159,45 @@ export const useCesium = () => {
     });
   }
 
+  function on(event: string, callback: (...params: any[]) => any) {
+    if (!defaultScreenSpaceHandler) return;
+    defaultScreenSpaceHandler.setInputAction(
+      callback,
+      ScreenSpaceEventType[event.toUpperCase()]
+    );
+  }
+
+  function getCartographic(position: Cartesian2 | Cartesian3) {
+    let latitude = 0;
+    let longitude = 0;
+
+    try {
+      if (position instanceof Cartesian2) {
+        const cartesian = viewer?.scene.camera.pickEllipsoid(position);
+        if (!cartesian) return;
+        const cartographic = Cartographic.fromCartesian(cartesian);
+        if (!cartographic) return;
+        latitude = CMath.toDegrees(cartographic.latitude);
+        longitude = CMath.toDegrees(cartographic.longitude);
+      } else if (position instanceof Cartesian3) {
+        const cartographic = Cartographic.fromCartesian(position);
+        if (!cartographic) return;
+        latitude = CMath.toDegrees(cartographic.latitude);
+        longitude = CMath.toDegrees(cartographic.longitude);
+      }
+
+      return { latitude, longitude };
+    } catch (err) {
+      return { latitude, longitude };
+    }
+  }
+
+  function getPicked(position: Cartesian2) {
+    if (!viewer) return [];
+    const picked = viewer?.scene.drillPick(position);
+    return picked.map((entity) => entity.id.id);
+  }
+
   return {
     viewer,
     init,
@@ -169,5 +212,8 @@ export const useCesium = () => {
     pause,
     clear,
     currentTime,
+    on,
+    getCartographic,
+    getPicked,
   };
 };

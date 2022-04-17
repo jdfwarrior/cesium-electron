@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
 const path = require("path");
 require("./express-server");
 
@@ -44,24 +44,44 @@ const getwindow = () => {
     return undefined;
   }
 };
+
 const minimize = () => {
   const win = getwindow();
   if (win) win.minimize();
 };
+
 const maximize = () => {
   const win = getwindow();
   if (win && win.isMaximized()) win.unmaximize();
   else if (win && !win.isMaximized()) win.maximize();
 };
+
 const restore = () => {
   const win = getwindow();
   if (win) win.restore();
 };
+
 const quit = () => {
   app.quit();
+};
+
+const context = (_, { menu, payload }) => {
+  const [win] = BrowserWindow.getAllWindows();
+
+  const asMenuItems = menu.map((m) => {
+    const { emits, ...item } = m;
+    return {
+      ...item,
+      click: () => win.webContents.send(emits, payload),
+    };
+  });
+
+  const m = Menu.buildFromTemplate(asMenuItems);
+  m.popup({});
 };
 
 ipcMain.handle("minimize", minimize);
 ipcMain.handle("maximize", maximize);
 ipcMain.handle("restore", restore);
 ipcMain.handle("exit", quit);
+ipcMain.handle("context", context);

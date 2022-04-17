@@ -4,15 +4,10 @@ import { useCesium } from "./composition/useCesium";
 
 import TheHeader from "./components/TheHeader.vue";
 import TheToolbar from "./components/TheToolbar.vue";
-import ToolbarButton from "./components/ToolbarButton.vue";
-import IconHome from "./components/icons/IconHome.vue";
 import IconMouse from "./components/icons/IconMouse.vue";
-import IconPlay from "./components/icons/IconPlay.vue";
-import IconPause from "./components/icons/IconPause.vue";
+import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
-
-const { isPlaying } = cesium;
 
 onMounted(() => {
   cesium.init("cesium");
@@ -20,6 +15,28 @@ onMounted(() => {
   window?.electron?.on("czml", (_: any, data: any) => {
     console.log(`received czml`, data);
     cesium.process(data);
+  });
+
+  window.electron.on("whats-here", (_, payload: any) => {
+    const description = `Latitude: ${payload.cartographic.latitude}, Longitude: ${payload.cartographic.longitude}`;
+    alert(description);
+  });
+
+  window.electron.on("delete", (_, payload: any) => {
+    const czml = payload.entities.map((id) => ({ id, delete: true }));
+    cesium.process(czml);
+  });
+
+  cesium.on("right_click", (event) => {
+    const cartographic = cesium.getCartographic(event.position);
+    const entities = cesium.getPicked(event.position);
+
+    const contextmenu: AppMenuItem[] = [
+      { label: "What's here?", emits: "whats-here" },
+      { label: "Delete", emits: "delete", enabled: !!entities.length },
+    ];
+
+    window.electron.context(contextmenu, { cartographic, entities });
   });
 });
 </script>
