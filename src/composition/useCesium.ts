@@ -198,6 +198,11 @@ export const useCesium = () => {
     return picked.map((entity) => entity.id.id);
   }
 
+  function setSpeed(multiplier: number) {
+    if (!viewer) return
+    viewer.clock.multiplier = multiplier
+  }
+
   return {
     viewer,
     init,
@@ -215,5 +220,6 @@ export const useCesium = () => {
     on,
     getCartographic,
     getPicked,
+    setSpeed
   };
 };

@@ -4,7 +4,6 @@ import { useHotkey } from "@/composition/useHotkey";
 import type { AppMenuItem } from "@/types/AppMenuItem";
 
 const cesium = useCesium();
-const { isPlaying } = cesium;
 
 useHotkey("Ctrl + H", cesium.home);
 useHotkey("Ctrl + Backspace", cesium.clear);
@@ -29,11 +28,6 @@ function onExit() {
   <header id="header">
     <div class="w-1/3 px-3 flex items-center space-x-2">
       <button class="action-button" @click="cesium.home" title="Return to home location (Ctrl + H)">Home</button>
-      <button class="action-button" @click="cesium.play" title="Play the loaded animation" v-if="!isPlaying">
-        Play
-      </button>
-      <button class="action-button" @click="cesium.pause" title="Pause the currently playing animation"
-        v-else>Pause</button>
       <button class="action-button" @click="cesium.clear"
         title="Remove all entities from the globe (Ctrl + Backspace)">Clear</button>
     </div>

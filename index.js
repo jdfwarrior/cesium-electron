@@ -69,10 +69,10 @@ const context = (_, { menu, payload }) => {
   const [win] = BrowserWindow.getAllWindows();
 
   const asMenuItems = menu.map((m) => {
-    const { emits, ...item } = m;
+    const { emits, value, ...item } = m;
     return {
       ...item,
-      click: () => win.webContents.send(emits, payload),
+      click: () => win.webContents.send(emits, { ...payload, value }),
     };
   });
 

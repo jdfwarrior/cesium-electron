@@ -5,9 +5,13 @@ import { useCesium } from "./composition/useCesium";
 import TheHeader from "./components/TheHeader.vue";
 import TheToolbar from "./components/TheToolbar.vue";
 import IconMouse from "./components/icons/IconMouse.vue";
+import IconPlay from './components/icons/IconPlay.vue'
+import IconPause from './components/icons/IconPause.vue'
+import IconSpeed from './components/icons/IconSpeed.vue'
 import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
+const { isPlaying } = cesium;
 
 onMounted(() => {
   cesium.init("cesium");
@@ -17,15 +21,21 @@ onMounted(() => {
     cesium.process(data);
   });
 
-  window.electron.on("whats-here", (_, payload: any) => {
+  window.electron.on("whats-here", (_: any, payload: any) => {
     const description = `Latitude: ${payload.cartographic.latitude}, Longitude: ${payload.cartographic.longitude}`;
     alert(description);
   });
 
-  window.electron.on("delete", (_, payload: any) => {
-    const czml = payload.entities.map((id) => ({ id, delete: true }));
+  window.electron.on("delete", (_: any, payload: any) => {
+    const czml = payload.entities.map((id: string) => ({ id, delete: true }));
     cesium.process(czml);
   });
+
+  window.electron.on('set-speed', (_: any, payload: any) => {
+    if ("value" in payload) {
+      cesium.setSpeed(payload.value)
+    }
+  })
 
   cesium.on("right_click", (event) => {
     const cartographic = cesium.getCartographic(event.position);
@@ -39,10 +49,38 @@ onMounted(() => {
     window.electron.context(contextmenu, { cartographic, entities });
   });
 });
+
+function showSpeedContext() {
+  const menu: AppMenuItem[] = [
+    { label: '1x', emits: 'set-speed', value: 1 },
+    { label: '2x', emits: 'set-speed', value: 2 },
+    { label: '5x', emits: 'set-speed', value: 5 },
+    { label: '10x', emits: 'set-speed', value: 10 },
+    { label: '20x', emits: 'set-speed', value: 20 },
+    { label: '50x', emits: 'set-speed', value: 50 },
+    { label: '100x', emits: 'set-speed', value: 100 },
+  ]
+
+  window.electron.context(menu)
+}
 </script>
 
 <template>
   <the-header />
+
+  <the-toolbar bottom left class="select-none">
+    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation"
+      class="disabled:text-gray-700 transform hover:scale-150">
+      <icon-play />
+    </button>
+    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation"
+      class="disabled:text-gray-700 transform hover:scale-150">
+      <icon-pause />
+    </button>
+    <button class="disabled:text-gray-700 transform hover:scale-150">
+      <icon-speed @click="showSpeedContext" />
+    </button>
+  </the-toolbar>
 
   <the-toolbar bottom right class="tabular-nums text-xs select-none">
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}

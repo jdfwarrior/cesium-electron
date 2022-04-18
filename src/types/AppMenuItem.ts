@@ -9,4 +9,5 @@ export interface AppMenuItem {
   checked?: boolean;
   accelerator?: string;
   submenu?: AppMenuItem[];
+  value?: any;
 }
