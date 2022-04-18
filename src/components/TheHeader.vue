@@ -37,21 +37,9 @@ function onExit() {
     </div>
     <div class="flex-grow text-center"></div>
     <div class="w-1/3 flex space-x-2 justify-end items-center px-3">
-      <button
-        title="Minimize"
-        @click="onMinimize"
-        class="window-control hover:bg-amber-300"
-      ></button>
-      <button
-        title="Maximize"
-        @click="onMaximize"
-        class="window-control hover:bg-green-300"
-      ></button>
-      <button
-        title="Exit"
-        @click="onExit"
-        class="window-control hover:bg-red-500"
-      ></button>
+      <button title="Minimize" @click="onMinimize" class="window-control hover:bg-amber-300"></button>
+      <button title="Maximize" @click="onMaximize" class="window-control hover:bg-green-300"></button>
+      <button title="Exit" @click="onExit" class="window-control hover:bg-red-500"></button>
     </div>
   </header>
 </template>
@@ -70,6 +58,7 @@ function onExit() {
 .action-button {
   @apply px-2 py-1 rounded;
   cursor: pointer;
+  user-select: none;
   -webkit-app-region: none;
 }
 

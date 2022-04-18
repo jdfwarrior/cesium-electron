@@ -44,7 +44,7 @@ onMounted(() => {
 <template>
   <the-header />
 
-  <the-toolbar bottom right class="tabular-nums text-xs">
+  <the-toolbar bottom right class="tabular-nums text-xs select-none">
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
     <icon-mouse class="ml-1" />
   </the-toolbar>
@@ -88,5 +88,9 @@ onMounted(() => {
 
 .cesium-timeline-bar {
   background: none !important;
+}
+
+.cesium-timeline-ticLabel {
+  user-select: none !important;
 }
 </style>
