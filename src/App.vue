@@ -11,7 +11,7 @@ import IconSpeed from './components/icons/IconSpeed.vue'
 import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
-const { isPlaying } = cesium;
+const { isPlaying, currentTime } = cesium;
 
 onMounted(() => {
   cesium.init("cesium");
@@ -68,17 +68,20 @@ function showSpeedContext() {
 <template>
   <the-header />
 
-  <the-toolbar bottom left class="select-none">
+  <the-toolbar bottom left class="select-none text-xs">
     <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation"
-      class="disabled:text-gray-700 transform hover:scale-150">
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
       <icon-play />
     </button>
     <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation"
-      class="disabled:text-gray-700 transform hover:scale-150">
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
       <icon-pause />
     </button>
-    <button class="disabled:text-gray-700 transform hover:scale-150">
+    <button class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
       <icon-speed @click="showSpeedContext" />
+    </button>
+    <button class="focus:outline-none tabular-nums">
+      {{ currentTime }}
     </button>
   </the-toolbar>
 
