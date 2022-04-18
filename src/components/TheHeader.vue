@@ -28,12 +28,14 @@ function onExit() {
 <template>
   <header id="header">
     <div class="w-1/3 px-3 flex items-center space-x-2">
-      <button class="action-button" @click="cesium.home">Home</button>
-      <button class="action-button" @click="cesium.play" v-if="!isPlaying">
+      <button class="action-button" @click="cesium.home" title="Return to home location (Ctrl + H)">Home</button>
+      <button class="action-button" @click="cesium.play" title="Play the loaded animation" v-if="!isPlaying">
         Play
       </button>
-      <button class="action-button" @click="cesium.pause" v-else>Pause</button>
-      <button class="action-button" @click="cesium.clear">Clear</button>
+      <button class="action-button" @click="cesium.pause" title="Pause the currently playing animation"
+        v-else>Pause</button>
+      <button class="action-button" @click="cesium.clear"
+        title="Remove all entities from the globe (Ctrl + Backspace)">Clear</button>
     </div>
     <div class="flex-grow text-center"></div>
     <div class="w-1/3 flex space-x-2 justify-end items-center px-3">
