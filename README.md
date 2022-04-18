@@ -80,6 +80,15 @@ npm run lint
 
 ## Changes
 
+### 4/17/2022
+- Work in progress: working on adding basic dropdown menu for menu bar
+- Added current time display beside play/pause buttons
+- Moved play/pause to toolbar in th ebottom left
+- Added the ability to set the playback speed
+- Added ability to padd custom values to the menu options
+- Added ability to right click and remove entities
+- Adjusted some tooltips and put their hotkey accelerator on them
+
 ### 4/7/2022
 
 - Added tranlucent header and removed the window frame
@@ -98,8 +107,7 @@ npm run lint
 
 - Ability to command the camera and other controls via the http interface
 - Custom controls for switching to the default base layers from Cesium
-- Playback time displayed beside the Play button
-- Ability to change the playback rate/multiplier
-- Button to remove all entities or clear all loaded data
 - Cleanup the build process and trim as much unnecessary stuff as possible from the release output
 - Typescript for the Electron main process and supporting modules
+- Finish implementation of dropdown component for menus
+- Add panel to show information about entities
