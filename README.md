@@ -82,6 +82,9 @@ npm run lint
 
 ## Changes
 
+### 4/22/2022
+- Added application screenshot
+
 ### 4/17/2022
 - Work in progress: working on adding basic dropdown menu for menu bar
 - Added current time display beside play/pause buttons
