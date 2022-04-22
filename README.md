@@ -1,5 +1,7 @@
 # Cesium Electron
 
+![Cesium Electron!](./screenshot.png "Cesium Electron")
+
 This is just a project I'm playing with. I work in Cesium, Electron, Vue and Vite all the time and was looking for something simple to build that could be used for analytical purposes.
 
 Currently, the application starts up, loads Cesium and can accept czml packets via http post at `localhost:3001/czml`
