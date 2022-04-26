@@ -38,6 +38,9 @@ const mouseLongitude = ref(0);
 const isPlaying = ref(true);
 const currentTime = ref("");
 const czmlCallbacks = new Set<(entity: Entity, packet: any) => void>();
+const selectedEntityChangedCallbacks = new Set<
+  (entity: Entity | undefined) => void
+>();
 
 export const useCesium = () => {
   const init = (id: string) => {
@@ -75,6 +78,12 @@ export const useCesium = () => {
     CzmlDataSource.updaters.push((entity: Entity, packet: any) => {
       czmlCallbacks.forEach((callback) => callback(entity, packet));
     });
+
+    viewer.selectedEntityChanged.addEventListener(
+      (entity: Entity | undefined) => {
+        selectedEntityChangedCallbacks.forEach((callback) => callback(entity));
+      }
+    );
   };
 
   const process = (czml: any[]) => [datasource?.process(czml)];
@@ -291,6 +300,11 @@ export const useCesium = () => {
 
   czmlCallbacks.add(addModified);
 
+  function whenEntitySelected(callback: (entity: Entity | undefined) => void) {
+    selectedEntityChangedCallbacks.add(callback);
+    return () => selectedEntityChangedCallbacks.delete(callback);
+  }
+
   return {
     viewer,
     init,
@@ -309,5 +323,6 @@ export const useCesium = () => {
     getCartographic,
     getPicked,
     setSpeed,
+    whenEntitySelected,
   };
 };

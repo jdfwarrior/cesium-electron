@@ -5,9 +5,10 @@ import { useCesium } from "./composition/useCesium";
 import TheHeader from "./components/TheHeader.vue";
 import TheToolbar from "./components/TheToolbar.vue";
 import IconMouse from "./components/icons/IconMouse.vue";
-import IconPlay from './components/icons/IconPlay.vue'
-import IconPause from './components/icons/IconPause.vue'
-import IconSpeed from './components/icons/IconSpeed.vue'
+import IconPlay from "./components/icons/IconPlay.vue";
+import IconPause from "./components/icons/IconPause.vue";
+import IconSpeed from "./components/icons/IconSpeed.vue";
+import InfoPanel from "./components/InfoPanel.vue";
 import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
@@ -31,11 +32,11 @@ onMounted(() => {
     cesium.process(czml);
   });
 
-  window.electron.on('set-speed', (_: any, payload: any) => {
+  window.electron.on("set-speed", (_: any, payload: any) => {
     if ("value" in payload) {
-      cesium.setSpeed(payload.value)
+      cesium.setSpeed(payload.value);
     }
-  })
+  });
 
   cesium.on("right_click", (event) => {
     const cartographic = cesium.getCartographic(event.position);
@@ -52,16 +53,16 @@ onMounted(() => {
 
 function showSpeedContext() {
   const menu: AppMenuItem[] = [
-    { label: '1x', emits: 'set-speed', value: 1 },
-    { label: '2x', emits: 'set-speed', value: 2 },
-    { label: '5x', emits: 'set-speed', value: 5 },
-    { label: '10x', emits: 'set-speed', value: 10 },
-    { label: '20x', emits: 'set-speed', value: 20 },
-    { label: '50x', emits: 'set-speed', value: 50 },
-    { label: '100x', emits: 'set-speed', value: 100 },
-  ]
+    { label: "1x", emits: "set-speed", value: 1 },
+    { label: "2x", emits: "set-speed", value: 2 },
+    { label: "5x", emits: "set-speed", value: 5 },
+    { label: "10x", emits: "set-speed", value: 10 },
+    { label: "20x", emits: "set-speed", value: 20 },
+    { label: "50x", emits: "set-speed", value: 50 },
+    { label: "100x", emits: "set-speed", value: 100 },
+  ];
 
-  window.electron.context(menu)
+  window.electron.context(menu);
 }
 </script>
 
@@ -69,15 +70,25 @@ function showSpeedContext() {
   <the-header />
 
   <the-toolbar bottom left class="select-none text-xs">
-    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation"
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+    <button
+      :disabled="isPlaying"
+      @click="cesium.play"
+      title="Play the loaded animation"
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none"
+    >
       <icon-play />
     </button>
-    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation"
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+    <button
+      :disabled="!isPlaying"
+      @click="cesium.pause"
+      title="Pause the currently playing animation"
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none"
+    >
       <icon-pause />
     </button>
-    <button class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+    <button
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none"
+    >
       <icon-speed @click="showSpeedContext" />
     </button>
     <button class="focus:outline-none tabular-nums">
@@ -89,6 +100,8 @@ function showSpeedContext() {
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
     <icon-mouse class="ml-1" />
   </the-toolbar>
+
+  <info-panel />
 
   <div id="cesium"></div>
 </template>
