@@ -12,7 +12,11 @@ import {
   JulianDate,
 } from "cesium";
 import type { Entity } from "cesium";
+import type { CameraAndOrientation, CesiumEvents } from "@/types/Cesium";
 
+// Intialize the default camera view within Cesium
+// We could initialize Cesium with a custom Camera but then we wouldn't
+// get the nice animation when the UI loads.
 const defaultView = {
   destination: new Cartesian3(
     -225044.32383565657,
@@ -33,7 +37,7 @@ const mouseLatitude = ref(0);
 const mouseLongitude = ref(0);
 const isPlaying = ref(true);
 const currentTime = ref("");
-const czmlCallbacks = new Set<Function>();
+const czmlCallbacks = new Set<(entity: Entity, packet: any) => void>();
 
 export const useCesium = () => {
   const init = (id: string) => {
@@ -50,16 +54,24 @@ export const useCesium = () => {
       requestRenderMode: true,
     });
 
+    // Set the default view when loaded
     home();
 
+    // Add the default czml datasource into Cesium
     viewer.dataSources.add(datasource);
 
+    // Add a default screenspaceeventhandler for managing events within Cesium
     const { canvas } = viewer.scene;
     defaultScreenSpaceHandler = new ScreenSpaceEventHandler(canvas);
 
+    // Track mouse location so that it can be displayed to the user
     watchMousePosition();
+    // Track the current animation time and reformat it for display
     watchClock();
 
+    // Add the base czml datasource updater that will loop through the list
+    // of czml callbacks that have been added to the application and call each
+    // with the current entity and czml packet.
     CzmlDataSource.updaters.push((entity: Entity, packet: any) => {
       czmlCallbacks.forEach((callback) => callback(entity, packet));
     });
@@ -67,7 +79,11 @@ export const useCesium = () => {
 
   const process = (czml: any[]) => [datasource?.process(czml)];
 
-  function getCamera() {
+  /**
+   * Gets and returns the current camera view and orientation so that it can be
+   * saved or restored later
+   */
+  function getCamera(): CameraAndOrientation | undefined {
     if (!viewer) throw new Error(`No viewer instance available`);
 
     try {
@@ -85,7 +101,6 @@ export const useCesium = () => {
         },
       };
 
-      console.log(result);
       return result;
     } catch (err) {
       console.warn(`[getCamera]`);
@@ -94,6 +109,9 @@ export const useCesium = () => {
     }
   }
 
+  /**
+   * Resets the current camera view back to the default saved camera and orientation
+   */
   function home() {
     if (!viewer) throw new Error(`No viewer instance available`);
 
@@ -105,22 +123,35 @@ export const useCesium = () => {
     }
   }
 
+  /**
+   * Enables Cesium animation functionality
+   */
   function play() {
     if (!viewer) throw new Error(`No viewer instance available`);
     viewer.clock.shouldAnimate = true;
     isPlaying.value = true;
   }
 
+  /**
+   * Pauses the Cesium animation functionality
+   */
   function pause() {
     if (!viewer) throw new Error(`No viewer instance available`);
     viewer.clock.shouldAnimate = false;
     isPlaying.value = false;
   }
 
+  /**
+   * Removes all entities from the default czml data source
+   */
   function clear() {
     datasource.entities.removeAll();
   }
 
+  /**
+   * Watches the current mouse location on the Cesium visualization
+   * and updates local references to the new latitude/longitude values
+   */
   function watchMousePosition() {
     if (!viewer) throw new Error(`No viewer instance available`);
 
@@ -151,6 +182,13 @@ export const useCesium = () => {
     }
   }
 
+  /**
+   * Watches for the clock `tick` event within Cesium and converts
+   * the new julian date/time to a standard Gregorian date/time
+   * and sets the value of a local ref to that date/time in a standardized
+   * format for consumption
+   * @example `Apr 25 2022 20:30:47`
+   */
   function watchClock() {
     if (!viewer) throw new Error(`No viewer instance available`);
 
@@ -162,7 +200,13 @@ export const useCesium = () => {
     });
   }
 
-  function on(event: string, callback: (...params: any[]) => any) {
+  /**
+   * Wrapper around the Cesium screenspace event handler to standardize it's use
+   * and make it similar to how most other event listeners function within Nodejs.
+   * @param event the event to listen for
+   * @param callback the callback function to execute when that event is fired
+   */
+  function on(event: CesiumEvents, callback: (...params: any[]) => any) {
     if (!defaultScreenSpaceHandler) return;
     defaultScreenSpaceHandler.setInputAction(
       callback,
@@ -170,7 +214,18 @@ export const useCesium = () => {
     );
   }
 
-  function getCartographic(position: Cartesian2 | Cartesian3) {
+  /**
+   * Converts a provided Cartesian2 or Cartesian3 value to a Cartographic
+   * value and converts the latitude/longitude result values to degrees
+   * as opposed to radians (the default)
+   * @param position
+   */
+  function getCartographic(position: Cartesian2 | Cartesian3):
+    | {
+        latitude: number;
+        longitude: number;
+      }
+    | undefined {
     let latitude = 0;
     let longitude = 0;
 
@@ -195,17 +250,40 @@ export const useCesium = () => {
     }
   }
 
-  function getPicked(position: Cartesian2) {
-    if (!viewer) return [];
-    const picked = viewer?.scene.drillPick(position);
-    return picked.map((entity) => entity.id.id);
+  /**
+   * Returns an array of picked entity ids at the given locatioon
+   * @param position the picked cartesian2 location
+   */
+  function getPicked(position: Cartesian2): string[] {
+    try {
+      if (!viewer) return [];
+      const picked = viewer?.scene.drillPick(position);
+      return picked.map((entity) => entity.id.id);
+    } catch (err) {
+      return [];
+    }
   }
 
+  /**
+   * Set the animation playback multiplier to the provided numeric value
+   * @param multiplier the numeric multiplier
+   */
   function setSpeed(multiplier: number) {
-    if (!viewer) return;
-    viewer.clock.multiplier = multiplier;
+    try {
+      if (!viewer) return;
+      viewer.clock.multiplier = multiplier;
+    } catch (err) {
+      console.warn(`Unable to set the playback multiplier`);
+    }
   }
 
+  /**
+   * Simple function that will, as czml packets are processed, will add a modified
+   * date of the current date/time to the entity so that we can track when it was
+   * last updated
+   * @param entity the entity that matches the provided czml packet
+   * @param packet the czml packet being processed
+   */
   function addModified(entity: Entity & { modified?: string }, packet: any) {
     if (!entity?.modified) entity.addProperty("modified");
     entity.modified = new Date().toISOString();
