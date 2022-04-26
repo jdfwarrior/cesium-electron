@@ -11,6 +11,7 @@ import {
   Math as CMath,
   JulianDate,
 } from "cesium";
+import type { Entity } from "cesium";
 
 const defaultView = {
   destination: new Cartesian3(
@@ -26,17 +27,16 @@ const defaultView = {
 };
 
 let viewer: Viewer | undefined;
-let datasource = new CzmlDataSource("entities");
 let defaultScreenSpaceHandler: ScreenSpaceEventHandler | undefined;
+const datasource = new CzmlDataSource("entities");
 const mouseLatitude = ref(0);
 const mouseLongitude = ref(0);
 const isPlaying = ref(true);
 const currentTime = ref("");
+const czmlCallbacks = new Set<Function>();
 
 export const useCesium = () => {
   const init = (id: string) => {
-    console.log("loading cesium...");
-
     viewer = new Viewer(id, {
       navigationHelpButton: false,
       geocoder: false,
@@ -54,12 +54,15 @@ export const useCesium = () => {
 
     viewer.dataSources.add(datasource);
 
-    defaultScreenSpaceHandler = new ScreenSpaceEventHandler(
-      viewer.scene.canvas
-    );
+    const { canvas } = viewer.scene;
+    defaultScreenSpaceHandler = new ScreenSpaceEventHandler(canvas);
 
     watchMousePosition();
     watchClock();
+
+    CzmlDataSource.updaters.push((entity: Entity, packet: any) => {
+      czmlCallbacks.forEach((callback) => callback(entity, packet));
+    });
   };
 
   const process = (czml: any[]) => [datasource?.process(czml)];
@@ -199,9 +202,16 @@ export const useCesium = () => {
   }
 
   function setSpeed(multiplier: number) {
-    if (!viewer) return
-    viewer.clock.multiplier = multiplier
+    if (!viewer) return;
+    viewer.clock.multiplier = multiplier;
   }
+
+  function addModified(entity: Entity & { modified?: string }, packet: any) {
+    if (!entity?.modified) entity.addProperty("modified");
+    entity.modified = new Date().toISOString();
+  }
+
+  czmlCallbacks.add(addModified);
 
   return {
     viewer,
@@ -220,6 +230,6 @@ export const useCesium = () => {
     on,
     getCartographic,
     getPicked,
-    setSpeed
+    setSpeed,
   };
 };
