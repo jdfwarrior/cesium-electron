@@ -83,9 +83,11 @@ npm run lint
 ## Changes
 
 ### 4/22/2022
+
 - Added application screenshot
 
 ### 4/17/2022
+
 - Work in progress: working on adding basic dropdown menu for menu bar
 - Added current time display beside play/pause buttons
 - Moved play/pause to toolbar in th ebottom left
@@ -116,3 +118,4 @@ npm run lint
 - Typescript for the Electron main process and supporting modules
 - Finish implementation of dropdown component for menus
 - Add panel to show information about entities
+- TypeScript definition for a czml packet. 🙄
