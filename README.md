@@ -82,6 +82,10 @@ npm run lint
 
 ## Changes
 
+### 5/3/2022
+
+- Replaced WindiCSS with Tailwind
+
 ### 4/22/2022
 
 - Added application screenshot
