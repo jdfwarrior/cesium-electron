@@ -85,6 +85,7 @@ npm run lint
 ### 5/3/2022
 
 - Replaced WindiCSS with Tailwind
+- Add FontAwesome and replace several icons with FontAwesome variants
 
 ### 4/22/2022
 
