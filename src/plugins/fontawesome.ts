@@ -5,10 +5,19 @@ import {
   faGaugeHigh,
   faPlay,
   faPause,
+  faHome,
+  faArrowRotateLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-library.add(faArrowPointer, faGaugeHigh, faPlay, faPause);
+library.add(
+  faArrowPointer,
+  faGaugeHigh,
+  faPlay,
+  faPause,
+  faHome,
+  faArrowRotateLeft
+);
 
 export const FontAwesome: Plugin = {
   install(app: App) {

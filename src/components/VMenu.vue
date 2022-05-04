@@ -44,7 +44,7 @@ function toggle() {
             <slot></slot>
         </div>
 
-        <span v-if="show" class="absolute" :style="position">
+        <span v-if="show" class="absolute z-40" :style="position">
             <slot name="popup"></slot>
         </span>
     </div>

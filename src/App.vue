@@ -65,6 +65,18 @@ function showSpeedContext() {
 <template>
   <the-header />
 
+  <the-toolbar top left class="select-none text-xs">
+    <button @click="cesium.home" title="Go to home location" class="transform hover:scale-150 focus:outline-none">
+      <fa-icon icon="home" />
+    </button>
+  </the-toolbar>
+
+  <the-toolbar top right class="select-none text-xs">
+    <button @click="cesium.clear" title="Reset all data" class="transform hover:scale-150 focus:outline-none">
+      <fa-icon icon="arrow-rotate-left" />
+    </button>
+  </the-toolbar>
+
   <the-toolbar bottom left class="select-none text-xs">
     <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation"
       class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">

@@ -27,26 +27,41 @@ function onExit() {
 function log() {
   console.log('got it')
 }
+
+function showFileMenu() {
+  const contextmenu: AppMenuItem[] = [
+    { label: 'Open File(s)' },
+    { type: 'separator' },
+    { label: 'Save' },
+    { label: 'Save As' },
+    { type: 'separator' },
+    { label: 'Close' },
+    { type: 'separator' },
+    { label: 'Quit' },
+  ];
+
+  window.electron.context(contextmenu);
+}
 </script>
 
 <template>
   <header id="header">
     <div class="w-1/3 px-2 flex items-center space-x-1">
-      <VMenu>
-        <button class="action-button" @click="cesium.home" title="Return to home location (Ctrl + H)">Home</button>
-        <template #popup>
+      <!-- <VMenu> -->
+      <!-- <button class="action-button" @click="showFileMenu">File</button> -->
+      <!-- <template #popup>
           <ul class="flex flex-col space-y-1 text-xs bg-white rounded p-2 text-gray-500 border border-gray-300">
-            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Option 1</li>
-            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer" @click="log">Option 2</li>
-            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Option 3</li>
-            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Option 4</li>
-            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Option 5</li>
+            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Open</li>
+            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Save</li>
+            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Save As</li>
+            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Close</li>
+            <li class="hover:bg-gray-200 px-2 rounded cursor-pointer">Quit</li>
           </ul>
         </template>
-      </VMenu>
+      </VMenu> -->
 
-      <button class="action-button" @click="cesium.clear"
-        title="Remove all entities from the globe (Ctrl + Backspace)">Clear</button>
+      <!-- <button class="action-button" @click="cesium.clear"
+        title="Remove all entities from the globe (Ctrl + Backspace)">Clear</button> -->
     </div>
     <div class="flex-grow text-center"></div>
     <div class="w-1/3 flex space-x-2 justify-end items-center px-3">
