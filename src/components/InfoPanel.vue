@@ -37,7 +37,7 @@ const close = () => {
 <template>
   <transition name="info-panel">
     <div
-      class="info-panel absolute top-10 right-3 w-72 bg-gray-900 bg-opacity-30 backdrop-blur-md z-30 rounded text-xs text-gray-200 shadow-lg"
+      class="info-panel absolute top-10 right-3 w-72 bg-gray-900 backdrop-blur-md z-30 rounded text-xs text-gray-200 shadow-lg"
       v-if="show">
       <div class="px-2 py-1 flex justify-between items-center">
         <h1>Info</h1>
@@ -48,7 +48,7 @@ const close = () => {
         Name: {{ name }}
       </div>
 
-      <div class="px-2 flex justify-end space-x-2 py-1 border-t border-gray-600">
+      <div class="px-2 flex justify-end space-x-2 py-1 border-t border-gray-800">
         <button type="button" @click="remove">
           <fa-icon icon="trash-can" />
         </button>
@@ -65,6 +65,6 @@ const close = () => {
 
 .info-panel-enter-active,
 .info-panel-leave-active {
-  transition: opacity 300ms ease;
+  transition: opacity .5s ease;
 }
 </style>
