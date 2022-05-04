@@ -4,10 +4,6 @@ import { useCesium } from "./composition/useCesium";
 
 import TheHeader from "./components/TheHeader.vue";
 import TheToolbar from "./components/TheToolbar.vue";
-import IconMouse from "./components/icons/IconMouse.vue";
-import IconPlay from "./components/icons/IconPlay.vue";
-import IconPause from "./components/icons/IconPause.vue";
-import IconSpeed from "./components/icons/IconSpeed.vue";
 import InfoPanel from "./components/InfoPanel.vue";
 import type { AppMenuItem } from "./types/AppMenuItem";
 
@@ -70,26 +66,16 @@ function showSpeedContext() {
   <the-header />
 
   <the-toolbar bottom left class="select-none text-xs">
-    <button
-      :disabled="isPlaying"
-      @click="cesium.play"
-      title="Play the loaded animation"
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none"
-    >
-      <icon-play />
+    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation"
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+      <fa-icon icon="play" class="mr-1" />
     </button>
-    <button
-      :disabled="!isPlaying"
-      @click="cesium.pause"
-      title="Pause the currently playing animation"
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none"
-    >
-      <icon-pause />
+    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation"
+      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+      <fa-icon icon="pause" class="mr-1" />
     </button>
-    <button
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none"
-    >
-      <icon-speed @click="showSpeedContext" />
+    <button class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none" title="Playback Speed">
+      <fa-icon icon="gauge-high" @click="showSpeedContext" class="mr-1" />
     </button>
     <button class="focus:outline-none tabular-nums">
       {{ currentTime }}
@@ -98,7 +84,7 @@ function showSpeedContext() {
 
   <the-toolbar bottom right class="tabular-nums text-xs select-none">
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
-    <icon-mouse class="ml-1" />
+    <fa-icon icon="arrow-pointer" class="ml-2" />
   </the-toolbar>
 
   <info-panel />
