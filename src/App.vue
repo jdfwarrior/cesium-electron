@@ -105,7 +105,7 @@ function showSpeedContext() {
 }
 
 #cesium {
-  top: 30px;
+  top: 00px;
 }
 
 .cesium-viewer-bottom {
@@ -113,7 +113,7 @@ function showSpeedContext() {
 }
 
 .cesium-timeline-main {
-  @apply bg-gray-900 bg-opacity-0 backdrop-filter backdrop-blur-sm;
+  @apply bg-gray-900 bg-opacity-0 backdrop-blur-sm;
   transition: all 0.3s ease-in;
   border: none !important;
 }

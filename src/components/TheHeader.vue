@@ -61,7 +61,7 @@ function log() {
 #header {
   @apply absolute top-0 left-0 right-0 z-20;
   @apply flex justify-start items-center;
-  @apply bg-gray-800 text-gray-400;
+  @apply bg-gray-900 text-white bg-opacity-0 backdrop-blur-sm;
   height: 30px;
   font-size: 10px;
   -webkit-app-region: drag;

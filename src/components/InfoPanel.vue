@@ -37,9 +37,8 @@ const close = () => {
 <template>
   <transition name="info-panel">
     <div
-      class="info-panel absolute top-10 right-3 w-64 bg-gray-800 z-10 rounded text-xs text-gray-200"
-      v-if="show"
-    >
+      class="info-panel absolute top-10 right-3 w-64 bg-gray-900 bg-opacity-30 backdrop-blur-md z-10 rounded text-xs text-gray-200"
+      v-if="show">
       <div class="px-2 py-1 flex justify-between items-center">
         {{ name }}
 
