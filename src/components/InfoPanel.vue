@@ -37,16 +37,21 @@ const close = () => {
 <template>
   <transition name="info-panel">
     <div
-      class="info-panel absolute top-10 right-3 w-64 bg-gray-900 bg-opacity-30 backdrop-blur-md z-10 rounded text-xs text-gray-200"
+      class="info-panel absolute top-10 right-3 w-72 bg-gray-900 bg-opacity-30 backdrop-blur-md z-30 rounded text-xs text-gray-200 shadow-lg"
       v-if="show">
       <div class="px-2 py-1 flex justify-between items-center">
-        {{ name }}
-
+        <h1>Info</h1>
         <button type="button" class="" @click="close">&times;</button>
       </div>
 
-      <div class="px-2 flex justify-end space-x-2 py-1">
-        <button type="button" @click="remove">Delete</button>
+      <div class="p-2 truncate">
+        Name: {{ name }}
+      </div>
+
+      <div class="px-2 flex justify-end space-x-2 py-1 border-t border-gray-600">
+        <button type="button" @click="remove">
+          <fa-icon icon="trash-can" />
+        </button>
       </div>
     </div>
   </transition>
