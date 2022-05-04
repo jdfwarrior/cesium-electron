@@ -55,6 +55,7 @@ export const useCesium = () => {
       shouldAnimate: true,
       targetFrameRate: 24,
       requestRenderMode: true,
+      infoBox: false
     });
 
     // Set the default view when loaded

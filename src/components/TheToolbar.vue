@@ -69,7 +69,7 @@ const positionClasses = computed(() => {
 
 <style scoped>
 #toolbar {
-  @apply absolute z-2;
+  @apply absolute z-20;
   @apply flex justify-start items-center;
   @apply bg-gray-900 p-1 rounded bg-opacity-80 backdrop-filter backdrop-blur-sm;
   @apply shadow border border-gray-700;

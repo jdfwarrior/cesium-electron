@@ -59,7 +59,7 @@ function log() {
 
 <style scoped>
 #header {
-  @apply absolute top-0 left-0 right-0 z-2;
+  @apply absolute top-0 left-0 right-0 z-20;
   @apply flex justify-start items-center;
   @apply bg-gray-800 text-gray-400;
   height: 30px;
