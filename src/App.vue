@@ -65,28 +65,26 @@ function showSpeedContext() {
 <template>
   <the-header />
 
-  <the-toolbar top left class="select-none text-xs">
-    <button @click="cesium.home" title="Go to home location" class="transform hover:scale-150 focus:outline-none">
+  <the-toolbar top left>
+    <button @click="cesium.home" title="Go to home location">
       <fa-icon icon="home" />
     </button>
   </the-toolbar>
 
-  <the-toolbar top right class="select-none text-xs">
-    <button @click="cesium.clear" title="Reset all data" class="transform hover:scale-150 focus:outline-none">
+  <the-toolbar top right>
+    <button @click="cesium.clear" title="Reset all data">
       <fa-icon icon="arrow-rotate-left" />
     </button>
   </the-toolbar>
 
-  <the-toolbar bottom left class="select-none text-xs">
-    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation"
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+  <the-toolbar bottom left>
+    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation">
       <fa-icon icon="play" class="mr-1" />
     </button>
-    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation"
-      class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none">
+    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation">
       <fa-icon icon="pause" class="mr-1" />
     </button>
-    <button class="disabled:text-gray-700 transform hover:scale-150 focus:outline-none" title="Playback Speed">
+    <button title="Playback Speed">
       <fa-icon icon="gauge-high" @click="showSpeedContext" class="mr-1" />
     </button>
     <button class="focus:outline-none tabular-nums">
@@ -94,7 +92,7 @@ function showSpeedContext() {
     </button>
   </the-toolbar>
 
-  <the-toolbar bottom right class="tabular-nums text-xs select-none">
+  <the-toolbar bottom right class="tabular-nums">
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
     <fa-icon icon="arrow-pointer" class="ml-2" />
   </the-toolbar>

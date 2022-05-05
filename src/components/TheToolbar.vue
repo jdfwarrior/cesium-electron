@@ -62,17 +62,34 @@ const positionClasses = computed(() => {
 </script>
 
 <template>
-  <div id="toolbar" :class="positionClasses">
+  <div class="toolbar" :class="positionClasses">
     <slot />
   </div>
 </template>
 
 <style scoped>
-#toolbar {
+.toolbar {
   @apply absolute z-20;
   @apply flex justify-start items-center;
   @apply bg-gray-900 py-1 px-2 rounded bg-opacity-30 backdrop-blur-md;
   @apply shadow border border-gray-700;
   @apply text-gray-200;
+  @apply select-none text-xs;
+}
+
+.toolbar /deep/ button {
+  @apply transform;
+}
+
+.toolbar /deep/ button:hover {
+  @apply scale-150;
+}
+
+.toolbar /deep/ button:focus {
+  @apply outline-none;
+}
+
+.toolbar /deep/ button:disabled {
+  @apply text-gray-700;
 }
 </style>
