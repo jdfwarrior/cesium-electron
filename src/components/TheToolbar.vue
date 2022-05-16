@@ -77,19 +77,19 @@ const positionClasses = computed(() => {
   @apply select-none text-xs;
 }
 
-.toolbar /deep/ button {
+.toolbar :deep(button) {
   @apply transform;
 }
 
-.toolbar /deep/ button:hover {
+.toolbar :deep(button:hover) {
   @apply scale-150;
 }
 
-.toolbar /deep/ button:focus {
+.toolbar :deep(button:focus) {
   @apply outline-none;
 }
 
-.toolbar /deep/ button:disabled {
+.toolbar :deep(button:disabled) {
   @apply text-gray-700;
 }
 </style>
