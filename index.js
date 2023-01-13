@@ -18,7 +18,7 @@ function createWindow() {
 
   console.log(process.env.cesiumenv);
   if (process.env.cesiumenv === "dev") {
-    win.loadURL("http://localhost:3000");
+    win.loadURL("http://localhost:5173");
   } else {
     win.loadURL("http://localhost:3001");
   }

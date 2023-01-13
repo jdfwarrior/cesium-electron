@@ -78,21 +78,34 @@ function showSpeedContext() {
   </the-toolbar>
 
   <the-toolbar bottom left>
-    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation">
+    <button
+      :disabled="isPlaying"
+      @click="cesium.play"
+      title="Play the loaded animation"
+    >
       <fa-icon icon="play" class="mr-1" />
     </button>
-    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation">
+    <button
+      :disabled="!isPlaying"
+      @click="cesium.pause"
+      title="Pause the currently playing animation"
+    >
       <fa-icon icon="pause" class="mr-1" />
     </button>
     <button title="Playback Speed">
       <fa-icon icon="gauge-high" @click="showSpeedContext" class="mr-1" />
     </button>
-    <button class="focus:outline-none tabular-nums">
+    <span class="focus:outline-none tabular-nums">
       {{ currentTime }}
-    </button>
+    </span>
   </the-toolbar>
 
-  <the-toolbar bottom right class="tabular-nums">
+  <the-toolbar
+    bottom
+    right
+    class="tabular-nums"
+    style="width: 160px; text-align: right"
+  >
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
     <fa-icon icon="arrow-pointer" class="ml-2" />
   </the-toolbar>
@@ -120,6 +133,11 @@ function showSpeedContext() {
 
 .cesium-viewer-bottom {
   display: none !important;
+}
+
+.cesium-viewer-timelineContainer {
+  @apply bg-gray-900 bg-opacity-10 backdrop-blur-md;
+  @apply border border-gray-700 text-gray-200 shadow select-none absolute;
 }
 
 .cesium-timeline-main {
