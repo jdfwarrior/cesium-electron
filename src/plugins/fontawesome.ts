@@ -9,6 +9,7 @@ import {
   faArrowRotateLeft,
   faTrashCan,
   faLock,
+  faChevronDown,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -20,7 +21,8 @@ library.add(
   faHome,
   faArrowRotateLeft,
   faTrashCan,
-  faLock
+  faLock,
+  faChevronDown
 );
 
 export const FontAwesome: Plugin = {
