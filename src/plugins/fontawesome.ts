@@ -8,6 +8,7 @@ import {
   faHome,
   faArrowRotateLeft,
   faTrashCan,
+  faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
@@ -18,7 +19,8 @@ library.add(
   faPause,
   faHome,
   faArrowRotateLeft,
-  faTrashCan
+  faTrashCan,
+  faLock
 );
 
 export const FontAwesome: Plugin = {

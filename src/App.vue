@@ -9,7 +9,7 @@ import ContextualMenu from "./components/ContextMenu/ContextualMenu.vue";
 import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
-const { isPlaying, currentTime } = cesium;
+const { isPlaying, currentTime, selected } = cesium;
 
 onMounted(() => {
   cesium.init("cesium");
@@ -111,7 +111,7 @@ function showSpeedContext() {
     <fa-icon icon="arrow-pointer" class="ml-2" />
   </the-toolbar>
 
-  <info-panel />
+  <info-panel v-if="selected" />
 
   <div id="cesium"></div>
 

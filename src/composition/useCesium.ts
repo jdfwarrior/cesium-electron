@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { ref, reactive, toRefs } from "vue";
 import { format } from "date-fns";
 import {
   Viewer,
@@ -42,6 +42,12 @@ const selectedEntityChangedCallbacks = new Set<
   (entity: Entity | undefined) => void
 >();
 
+const state = reactive<{
+  selected: Entity | undefined;
+}>({
+  selected: undefined,
+});
+
 export const useCesium = () => {
   const init = (id: string) => {
     viewer = new Viewer(id, {
@@ -53,9 +59,10 @@ export const useCesium = () => {
       fullscreenButton: false,
       animation: false,
       shouldAnimate: true,
-      targetFrameRate: 24,
+      targetFrameRate: 40,
       requestRenderMode: true,
-      infoBox: false
+      infoBox: false,
+      selectionIndicator: false,
     });
 
     // Set the default view when loaded
@@ -83,6 +90,7 @@ export const useCesium = () => {
     viewer.selectedEntityChanged.addEventListener(
       (entity: Entity | undefined) => {
         selectedEntityChangedCallbacks.forEach((callback) => callback(entity));
+        state.selected = entity;
       }
     );
   };
@@ -325,5 +333,6 @@ export const useCesium = () => {
     getPicked,
     setSpeed,
     whenEntitySelected,
+    ...toRefs(state),
   };
 };

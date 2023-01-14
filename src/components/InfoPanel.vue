@@ -1,63 +1,163 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from "vue";
+import { ref, reactive, onMounted, onUnmounted } from "vue";
 import { useCesium } from "@/composition/useCesium";
 import type { Entity } from "cesium";
 
-const show = ref(false);
-const id = ref("");
-const name = ref("");
+const { selected, process } = useCesium();
 
-const clear = () => (show.value = false);
+const state = reactive({
+  latitude: 0,
+  longitude: 0,
+});
 
-const update = (entity: Entity | undefined) => {
-  if (!entity) return clear();
+function remove() {
+  if (!selected.value) return;
+  const { id } = selected.value;
+  process([{ id, delete: true }]);
+}
 
-  show.value = true;
-  id.value = entity.id as string;
-  name.value = entity.name ?? "No name provided";
-};
-
-const { whenEntitySelected, process } = useCesium();
-let entitySelectedHandler = whenEntitySelected(update);
-onUnmounted(() => entitySelectedHandler?.());
-
-const remove = () => {
-  process([{ id: id.value, delete: true }]);
-};
-
-const close = () => {
+function close() {
   const { viewer } = useCesium();
-  show.value = false;
-
   if (!viewer) return;
   viewer.selectedEntity = undefined;
-};
+}
+
+function track() {
+  const { viewer } = useCesium();
+  if (!viewer) return;
+  if (!viewer?.trackedEntity) viewer.trackedEntity = selected.value;
+  else viewer.trackedEntity = undefined;
+}
+
+function positionWatcher() {
+  const { viewer, getCartographic } = useCesium();
+  if (!viewer) return;
+  const currentJulian = viewer?.clock.currentTime;
+  if (!selected) throw new Error(`no selected entity found`);
+  const cartesian3 = selected.value?.position?.getValue(currentJulian);
+  if (!cartesian3) throw new Error(`no cartesian found`);
+  const cartographic = getCartographic(cartesian3);
+  if (!cartographic) throw new Error(`no cartographic found`);
+  const { latitude, longitude } = cartographic;
+  state.latitude = latitude;
+  state.longitude = longitude;
+}
+
+onMounted(() => {
+  const { viewer } = useCesium();
+  viewer?.clock.onTick.addEventListener(positionWatcher);
+  positionWatcher();
+});
+
+onUnmounted(() => {
+  const { viewer } = useCesium();
+  viewer?.clock.onTick.removeEventListener(positionWatcher);
+});
 </script>
 
 <template>
-  <transition name="info-panel">
-    <div
-      class="info-panel absolute top-10 right-3 w-72 bg-gray-900 backdrop-blur-md z-30 rounded text-xs text-gray-200 shadow-lg"
-      v-if="show">
-      <div class="px-2 py-1 flex justify-between items-center">
-        <h1>Info</h1>
-        <button type="button" class="" @click="close">&times;</button>
-      </div>
+  <teleport to="body">
+    <transition name="info-panel">
+      <div v-draggable class="info-panel">
+        <div class="px-2 py-1 flex justify-end items-center">
+          <button type="button" class="" @click="close">&times;</button>
+        </div>
 
-      <div class="p-2 truncate">
-        Name: {{ name }}
-      </div>
+        <div class="h-full overflow-y-scroll">
+          <h3 class="text-lg px-3 text-gray-800 font-bold">Entity Details</h3>
 
-      <div class="px-2 flex justify-end space-x-2 py-1 border-t border-gray-800">
-        <button type="button" @click="remove">
-          <fa-icon icon="trash-can" />
-        </button>
+          <section class="section-rows">
+            <div class="row">
+              <label class="label">Name</label>
+              <span class="value">{{ selected?.name }}</span>
+            </div>
+            <div class="row">
+              <label class="label">Latitude</label>
+              <span class="value">{{ state.latitude.toFixed(4) }}</span>
+            </div>
+            <div class="row">
+              <label class="label">Longitude</label>
+              <span class="value">{{ state.longitude.toFixed(4) }}</span>
+            </div>
+          </section>
+
+          <h3 class="text-lg px-3 text-gray-800 font-bold">Description</h3>
+
+          <section class="section-block">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Vestibulum magna velit, hendrerit quis nulla et, malesuada ornare
+              odio. Nam consectetur dignissim arcu at tincidunt. Praesent
+              vestibulum purus sed porttitor faucibus. Donec malesuada erat
+              neque, sit amet viverra arcu faucibus at.
+            </p>
+
+            <p>
+              Morbi et ante at quam rutrum aliquet quis ac sem. Fusce interdum
+              accumsan diam, a condimentum neque fermentum id. Etiam vel
+              sagittis metus. Aliquam sollicitudin blandit libero, non efficitur
+              nisi scelerisque lobortis.
+            </p>
+          </section>
+        </div>
+
+        <footer class="mt-5 px-2 flex justify-end space-x-3 py-1">
+          <button
+            type="button"
+            @click="track"
+            title="Lock to the selected entity"
+          >
+            <fa-icon icon="lock" />
+          </button>
+          <button
+            type="button"
+            @click="remove"
+            title="Remove the selected entity"
+          >
+            <fa-icon icon="trash-can" />
+          </button>
+        </footer>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </teleport>
 </template>
 
 <style scoped>
+.info-panel {
+  @apply fixed top-20 right-3 w-72 flex flex-col;
+  @apply bg-white bg-opacity-40 backdrop-blur-sm z-30 rounded shadow;
+  @apply shadow;
+  @apply text-xs text-gray-200;
+  @apply h-2/3;
+}
+
+.info-panel section.section-rows {
+  @apply bg-white bg-opacity-40 backdrop-blur-md rounded shadow-lg;
+  @apply text-gray-800;
+  @apply p-3 m-3;
+  @apply divide-y divide-gray-400;
+}
+
+.info-panel section.section-block {
+  @apply bg-white bg-opacity-40 backdrop-blur-md rounded shadow-lg;
+  @apply text-gray-800;
+  @apply p-3 m-3;
+}
+
+.info-panel section.section-block > p {
+  @apply py-3;
+}
+
+.info-panel section .row {
+  @apply flex justify-between items-center py-2;
+}
+
+.info-panel footer {
+  @apply bg-white bg-opacity-40 backdrop-blur-md rounded-b shadow;
+  @apply text-gray-800;
+  @apply p-3;
+}
+
 .info-panel-enter-from,
 .info-panel-leave-to {
   opacity: 0;
@@ -65,6 +165,6 @@ const close = () => {
 
 .info-panel-enter-active,
 .info-panel-leave-active {
-  transition: opacity .5s ease;
+  transition: opacity 0.5s ease;
 }
 </style>
