@@ -115,6 +115,15 @@ npm run lint
 - Added windi css for quicker/easier styling
 - Added a little more documentation to the readme
 
+### 1/13/2023
+
+- Cleaned up styling on the timeline to match other elements
+- Restyled the info panel
+- Added "track" button to the info panel
+- Styled the scrollbars in the info panel
+- Made info panel draggable
+- Info Panel shows entity location
+
 ## Things to add
 
 - Ability to command the camera and other controls via the http interface
