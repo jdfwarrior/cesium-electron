@@ -5,6 +5,7 @@ import { useCesium } from "./composition/useCesium";
 import TheHeader from "./components/TheHeader.vue";
 import TheToolbar from "./components/TheToolbar.vue";
 import InfoPanel from "./components/InfoPanel.vue";
+import ContextualMenu from "./components/ContextMenu/ContextualMenu.vue";
 import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
@@ -113,6 +114,8 @@ function showSpeedContext() {
   <info-panel />
 
   <div id="cesium"></div>
+
+  <contextual-menu />
 </template>
 
 <style>
