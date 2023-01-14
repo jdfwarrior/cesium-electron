@@ -141,6 +141,14 @@ function showSpeedContext() {
 .cesium-viewer-timelineContainer {
   @apply bg-gray-900 bg-opacity-10 backdrop-blur-md;
   @apply border border-gray-700 text-gray-200 shadow select-none absolute;
+  @apply rounded-full;
+  left: 0.75rem !important;
+  right: 0.75rem !important;
+  bottom: 0.5rem !important;
+}
+
+.cesium-timeline-icon16 {
+  background-image: url("/timeline-marker.png") !important;
 }
 
 .cesium-timeline-main {
