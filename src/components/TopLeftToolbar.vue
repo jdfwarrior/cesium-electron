@@ -26,7 +26,7 @@ function loadSampleData() {
       cartographicDegrees: [-86, 34, 100],
     },
     billboard: {
-      scale: 1,
+      scale: { number: 1 },
       image: {
         uri: "/favicon.ico",
       },
@@ -96,7 +96,7 @@ function loadSampleData() {
       image: {
         uri: "/favicon.ico",
       },
-      scale: 1.5,
+      scale: { number: 1.5 },
     },
     position: {
       cartographicDegrees: [

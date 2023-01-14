@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from "vue";
+import { reactive, onMounted, onUnmounted } from "vue";
 import { useCesium } from "@/composition/useCesium";
 import type { Entity } from "cesium";
 
@@ -86,6 +86,36 @@ onUnmounted(() => {
           <section class="section-block">
             <p>{{ selected?.description ?? "This item has no description" }}</p>
           </section>
+
+          <template v-if="selected?.billboard">
+            <h3 class="text-lg px-3 text-gray-800 font-bold">Billboard</h3>
+            <section class="section-rows">
+              <div class="row">
+                <label class="label">Scale</label>
+                <span class="value">{{ selected?.billboard?.scale }}</span>
+              </div>
+            </section>
+          </template>
+
+          <template v-if="selected?.cylinder">
+            <h3 class="text-lg px-3 text-gray-800 font-bold">Cylinder</h3>
+            <section class="section-rows">
+              <div class="row">
+                <label class="label">Top Radius</label>
+                <span class="value">{{ selected?.cylinder?.topRadius }}</span>
+              </div>
+              <div class="row">
+                <label class="label">Bottom Radius</label>
+                <span class="value">{{
+                  selected?.cylinder?.bottomRadius
+                }}</span>
+              </div>
+              <div class="row">
+                <label class="label">Length</label>
+                <span class="value">{{ selected?.cylinder?.length }}</span>
+              </div>
+            </section>
+          </template>
         </div>
 
         <footer class="mt-5 px-2 flex justify-end space-x-3 py-1">
