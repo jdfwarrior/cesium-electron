@@ -73,11 +73,11 @@ onUnmounted(() => {
             </div>
             <div class="row">
               <label class="label">Latitude</label>
-              <span class="value">{{ state.latitude.toFixed(4) }}</span>
+              <span class="value">{{ state.latitude.toFixed(4) }}°</span>
             </div>
             <div class="row">
               <label class="label">Longitude</label>
-              <span class="value">{{ state.longitude.toFixed(4) }}</span>
+              <span class="value">{{ state.longitude.toFixed(4) }}°</span>
             </div>
           </section>
 
@@ -101,17 +101,17 @@ onUnmounted(() => {
             <h3 class="text-lg px-3 text-gray-800 font-bold">Cylinder</h3>
             <section class="section-rows">
               <div class="row">
-                <label class="label">Top Radius</label>
+                <label class="label">Top Radius (m)</label>
                 <span class="value">{{ selected?.cylinder?.topRadius }}</span>
               </div>
               <div class="row">
-                <label class="label">Bottom Radius</label>
+                <label class="label">Bottom Radius (m)</label>
                 <span class="value">{{
                   selected?.cylinder?.bottomRadius
                 }}</span>
               </div>
               <div class="row">
-                <label class="label">Length</label>
+                <label class="label">Length (m)</label>
                 <span class="value">{{ selected?.cylinder?.length }}</span>
               </div>
             </section>
