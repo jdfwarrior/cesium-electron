@@ -84,20 +84,7 @@ onUnmounted(() => {
           <h3 class="text-lg px-3 text-gray-800 font-bold">Description</h3>
 
           <section class="section-block">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum magna velit, hendrerit quis nulla et, malesuada ornare
-              odio. Nam consectetur dignissim arcu at tincidunt. Praesent
-              vestibulum purus sed porttitor faucibus. Donec malesuada erat
-              neque, sit amet viverra arcu faucibus at.
-            </p>
-
-            <p>
-              Morbi et ante at quam rutrum aliquet quis ac sem. Fusce interdum
-              accumsan diam, a condimentum neque fermentum id. Etiam vel
-              sagittis metus. Aliquam sollicitudin blandit libero, non efficitur
-              nisi scelerisque lobortis.
-            </p>
+            <p>{{ selected?.description ?? "This item has no description" }}</p>
           </section>
         </div>
 
