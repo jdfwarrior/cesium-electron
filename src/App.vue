@@ -3,13 +3,16 @@ import { onMounted } from "vue";
 import { useCesium } from "./composition/useCesium";
 
 import TheHeader from "./components/TheHeader.vue";
-import TheToolbar from "./components/TheToolbar.vue";
 import InfoPanel from "./components/InfoPanel.vue";
 import ContextualMenu from "./components/ContextMenu/ContextualMenu.vue";
+import AnimationController from "./components/AnimationController.vue";
+import TopLeftToolbar from "./components/TopLeftToolbar.vue";
+import TopRightToolbar from "./components/TopRightToolbar.vue";
+import MouseTracker from "./components/MouseTracker.vue";
 import type { AppMenuItem } from "./types/AppMenuItem";
 
 const cesium = useCesium();
-const { isPlaying, currentTime, selected } = cesium;
+const { selected } = cesium;
 
 onMounted(() => {
   cesium.init("cesium");
@@ -47,74 +50,19 @@ onMounted(() => {
     window.electron.context(contextmenu, { cartographic, entities });
   });
 });
-
-function showSpeedContext() {
-  const menu: AppMenuItem[] = [
-    { label: "1x", emits: "set-speed", value: 1 },
-    { label: "2x", emits: "set-speed", value: 2 },
-    { label: "5x", emits: "set-speed", value: 5 },
-    { label: "10x", emits: "set-speed", value: 10 },
-    { label: "20x", emits: "set-speed", value: 20 },
-    { label: "50x", emits: "set-speed", value: 50 },
-    { label: "100x", emits: "set-speed", value: 100 },
-  ];
-
-  window.electron.context(menu);
-}
 </script>
 
 <template>
   <the-header />
 
-  <the-toolbar top left>
-    <button @click="cesium.home" title="Go to home location">
-      <fa-icon icon="home" />
-    </button>
-  </the-toolbar>
-
-  <the-toolbar top right>
-    <button @click="cesium.clear" title="Reset all data">
-      <fa-icon icon="arrow-rotate-left" />
-    </button>
-  </the-toolbar>
-
-  <the-toolbar bottom left>
-    <button
-      :disabled="isPlaying"
-      @click="cesium.play"
-      title="Play the loaded animation"
-    >
-      <fa-icon icon="play" class="mr-1" />
-    </button>
-    <button
-      :disabled="!isPlaying"
-      @click="cesium.pause"
-      title="Pause the currently playing animation"
-    >
-      <fa-icon icon="pause" class="mr-1" />
-    </button>
-    <button title="Playback Speed">
-      <fa-icon icon="gauge-high" @click="showSpeedContext" class="mr-1" />
-    </button>
-    <span class="focus:outline-none tabular-nums">
-      {{ currentTime }}
-    </span>
-  </the-toolbar>
-
-  <the-toolbar
-    bottom
-    right
-    class="tabular-nums"
-    style="width: 160px; text-align: right"
-  >
-    {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
-    <fa-icon icon="arrow-pointer" class="ml-2" />
-  </the-toolbar>
-
-  <info-panel v-if="selected" />
+  <top-left-toolbar />
+  <top-right-toolbar />
+  <animation-controller />
+  <mouse-tracker />
 
   <div id="cesium"></div>
 
+  <info-panel v-if="selected" />
   <contextual-menu />
 </template>
 
