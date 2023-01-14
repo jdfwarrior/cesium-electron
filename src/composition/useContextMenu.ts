@@ -64,8 +64,6 @@ export const useContextMenu = () => {
 
     state.styles.left = x + "px";
     state.styles.top = y + "px";
-
-    console.log(state.styles);
   }
 
   function close() {
