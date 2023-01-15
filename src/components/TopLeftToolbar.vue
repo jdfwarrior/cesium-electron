@@ -136,7 +136,11 @@ const menuItems = [
 
 <template>
   <the-toolbar top left>
-    <button @click="cesium.home" title="Go to home location">
+    <button
+      @click="cesium.home"
+      title="Reset View"
+      v-hotkey="{ combo: 'Ctrl + L', action: cesium.home }"
+    >
       <fa-icon icon="home" />
     </button>
     <button v-context="{ event: 'click', items: menuItems }">

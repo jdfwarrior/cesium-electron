@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 import { FontAwesome } from "./plugins/fontawesome";
 import { vContext } from "./directives/context";
 import { vDraggable } from "./directives/draggable";
+import { vHotkey } from "./directives/hotkey";
 import App from "./App.vue";
 import "../node_modules/cesium/Source/Widgets/widgets.css";
 import "./assets/base.css";
@@ -14,5 +15,6 @@ app.use(createPinia());
 app.use(FontAwesome);
 app.use(vContext);
 app.use(vDraggable);
+app.use(vHotkey);
 
 app.mount("#app");
