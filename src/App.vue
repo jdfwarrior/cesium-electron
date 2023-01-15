@@ -49,6 +49,8 @@ onMounted(() => {
 
     window.electron.context(contextmenu, { cartographic, entities });
   });
+
+  cesium.createTimeline("#timeline");
 });
 </script>
 
@@ -57,13 +59,19 @@ onMounted(() => {
 
   <top-left-toolbar />
   <top-right-toolbar />
-  <animation-controller />
-  <mouse-tracker />
 
   <div id="cesium"></div>
 
   <info-panel v-if="selected" />
   <contextual-menu />
+
+  <div
+    class="flex justify-start items-center absolute bottom-3 space-x-3 left-3 right-3 h-6"
+  >
+    <div><animation-controller /></div>
+    <div id="timeline" class="grow cesium-viewer-timelineContainer"></div>
+    <div><mouse-tracker /></div>
+  </div>
 </template>
 
 <style>
@@ -79,7 +87,7 @@ onMounted(() => {
 }
 
 #cesium {
-  top: 00px;
+  top: 0px;
 }
 
 .cesium-viewer-bottom {
@@ -90,9 +98,13 @@ onMounted(() => {
   @apply bg-gray-900 bg-opacity-10 backdrop-blur-md;
   @apply border border-gray-700 text-gray-200 shadow select-none absolute;
   @apply rounded-full;
-  left: 0.75rem !important;
+  position: relative !important;
+  left: 0px !important;
+  right: 0px !important;
+  width: auto;
+  /* left: 0.75rem !important;
   right: 0.75rem !important;
-  bottom: 0.5rem !important;
+  bottom: 0.5rem !important; */
 }
 
 .cesium-timeline-icon16 {
@@ -100,7 +112,7 @@ onMounted(() => {
 }
 
 .cesium-timeline-main {
-  @apply bg-gray-900 bg-opacity-0 backdrop-blur-sm;
+  @apply bg-gray-900 bg-opacity-0 backdrop-blur-sm text-white h-6;
   transition: all 0.3s ease-in;
   border: none !important;
 }

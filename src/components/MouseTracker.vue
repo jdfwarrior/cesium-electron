@@ -5,12 +5,7 @@ const cesium = useCesium();
 </script>
 
 <template>
-  <the-toolbar
-    bottom
-    right
-    class="tabular-nums"
-    style="width: 160px; text-align: right"
-  >
+  <the-toolbar class="tabular-nums justify-end" style="width: 160px">
     {{ cesium.mouseLatitude }}, {{ cesium.mouseLongitude }}
     <fa-icon icon="arrow-pointer" class="ml-2" />
   </the-toolbar>

@@ -14,6 +14,10 @@ const props = defineProps<ToolbarProps>();
 const positionClasses = computed(() => {
   const classes: string[] = [];
 
+  if (props.left || props.right || props.top || props.bottom) {
+    classes.push("absolute", "z-20");
+  }
+
   if (props.left) classes.push("justify-start", "left-3");
   if (props.right) classes.push("justify-end", "right-3");
   if (props.top) classes.push("top-10");
@@ -33,7 +37,6 @@ const positionClasses = computed(() => {
 
 <style scoped>
 .toolbar {
-  @apply absolute z-20;
   @apply flex items-center;
   @apply bg-gray-900 py-1 px-2 rounded-full bg-opacity-10 backdrop-blur-md;
   @apply shadow border border-gray-700;

@@ -23,7 +23,7 @@ function showSpeedContext() {
 </script>
 
 <template>
-  <the-toolbar bottom left>
+  <the-toolbar>
     <button
       :disabled="isPlaying"
       @click="cesium.play"

@@ -10,6 +10,7 @@ import {
   ScreenSpaceEventType,
   Math as CMath,
   JulianDate,
+  Timeline,
 } from "cesium";
 import type { Entity } from "cesium";
 import type { CameraAndOrientation, CesiumEvents } from "@/types/Cesium";
@@ -44,8 +45,10 @@ const selectedEntityChangedCallbacks = new Set<
 
 const state = reactive<{
   selected: Entity | undefined;
+  timeline: Timeline | undefined;
 }>({
   selected: undefined,
+  timeline: undefined,
 });
 
 export const useCesium = () => {
@@ -63,6 +66,7 @@ export const useCesium = () => {
       requestRenderMode: true,
       infoBox: false,
       selectionIndicator: false,
+      timeline: false,
     });
 
     // Set the default view when loaded
@@ -314,6 +318,19 @@ export const useCesium = () => {
     return () => selectedEntityChangedCallbacks.delete(callback);
   }
 
+  function createTimeline(selector: string) {
+    const ele = document.querySelector(selector);
+    if (!ele) return;
+    if (!viewer) return;
+    state.timeline = new Timeline(ele, viewer?.clock);
+
+    window.addEventListener("resize", refreshTimeline);
+  }
+
+  function refreshTimeline() {
+    state.timeline?.resize();
+  }
+
   return {
     viewer,
     init,
@@ -333,6 +350,8 @@ export const useCesium = () => {
     getPicked,
     setSpeed,
     whenEntitySelected,
+    createTimeline,
+    refreshTimeline,
     ...toRefs(state),
   };
 };
