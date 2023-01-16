@@ -4,7 +4,7 @@ import type { MenuItem } from "@/composition/useContextMenu";
 
 interface ContextBindings {
   event?: "click" | "contextmenu";
-  items?: MenuItem[];
+  items?: MenuItem[] | ((event: MouseEvent) => MenuItem[]);
   anchor?: string;
 }
 
@@ -15,12 +15,19 @@ export const vContext: Plugin = {
       binding: DirectiveBinding<ContextBindings>
     ) => {
       const listenFor = binding?.value?.event ?? "contextmenu";
-      const menuItems = binding.value.items ?? [];
       const anchor = binding.value.anchor ?? "body";
 
-      el.addEventListener(listenFor, () => {
+      el.addEventListener(listenFor, (event: MouseEvent) => {
+        let menuItems: MenuItem[] = [];
+
+        if (typeof binding.value.items === "function") {
+          menuItems = binding.value.items(event);
+        } else {
+          menuItems = binding.value.items as MenuItem[];
+        }
+
         const menu = useContextMenu();
-        menu.open(el, menuItems, anchor);
+        menu.open(el, event, menuItems, anchor);
       });
     };
     app.directive("context", dir);

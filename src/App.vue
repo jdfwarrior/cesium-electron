@@ -9,10 +9,10 @@ import AnimationController from "./components/AnimationController.vue";
 import TopLeftToolbar from "./components/TopLeftToolbar.vue";
 import TopRightToolbar from "./components/TopRightToolbar.vue";
 import MouseTracker from "./components/MouseTracker.vue";
-import type { AppMenuItem } from "./types/AppMenuItem";
+import { Cartesian2 } from "cesium";
 
 const cesium = useCesium();
-const { selected } = cesium;
+const { selected, selectById } = cesium;
 
 onMounted(() => {
   cesium.init("cesium");
@@ -22,36 +22,43 @@ onMounted(() => {
     cesium.process(data);
   });
 
-  window.electron.on("whats-here", (_: any, payload: any) => {
-    const description = `Latitude: ${payload.cartographic.latitude}, Longitude: ${payload.cartographic.longitude}`;
-    alert(description);
-  });
-
-  window.electron.on("delete", (_: any, payload: any) => {
-    const czml = payload.entities.map((id: string) => ({ id, delete: true }));
-    cesium.process(czml);
-  });
-
   window.electron.on("set-speed", (_: any, payload: any) => {
     if ("value" in payload) {
       cesium.setSpeed(payload.value);
     }
   });
 
-  cesium.on("right_click", (event) => {
-    const cartographic = cesium.getCartographic(event.position);
-    const entities = cesium.getPicked(event.position);
-
-    const contextmenu: AppMenuItem[] = [
-      { label: "What's here?", emits: "whats-here" },
-      { label: "Delete", emits: "delete", enabled: !!entities.length },
-    ];
-
-    window.electron.context(contextmenu, { cartographic, entities });
-  });
-
   cesium.createTimeline("#timeline");
 });
+
+function remove(entities: string[]) {
+  const czml = entities.map((id: string) => ({ id, delete: true }));
+  cesium.process(czml);
+}
+
+function select(entities: string[]) {
+  const [entity] = entities;
+  if (entity) selectById(entity);
+}
+
+function createCesiumContext(event: MouseEvent) {
+  const cartesian = new Cartesian2(event.clientX, event.clientY);
+  const entities = cesium.getPicked(cartesian);
+  const cartographic = cesium.getCartographic(cartesian);
+
+  return [
+    {
+      id: "select",
+      text: "Select",
+      click: () => select(entities),
+    },
+    {
+      id: "remove",
+      text: "Remove",
+      click: () => remove(entities),
+    },
+  ];
+}
 </script>
 
 <template>
@@ -60,7 +67,7 @@ onMounted(() => {
   <top-left-toolbar />
   <top-right-toolbar />
 
-  <div id="cesium"></div>
+  <div id="cesium" v-context="{ items: createCesiumContext }"></div>
 
   <info-panel v-if="selected" />
   <contextual-menu />
@@ -102,9 +109,6 @@ onMounted(() => {
   left: 0px !important;
   right: 0px !important;
   width: auto;
-  /* left: 0.75rem !important;
-  right: 0.75rem !important;
-  bottom: 0.5rem !important; */
 }
 
 .cesium-timeline-icon16 {

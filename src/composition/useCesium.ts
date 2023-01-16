@@ -273,13 +273,14 @@ export const useCesium = () => {
   }
 
   /**
-   * Returns an array of picked entity ids at the given locatioon
+   * Returns an array of picked entity ids at the given location
    * @param position the picked cartesian2 location
+   * @param limit limit to X number of picked entities. can increase performance (default: 5)
    */
-  function getPicked(position: Cartesian2): string[] {
+  function getPicked(position: Cartesian2, limit = 5): string[] {
     try {
       if (!viewer) return [];
-      const picked = viewer?.scene.drillPick(position);
+      const picked = viewer?.scene.drillPick(position, limit);
       return picked.map((entity) => entity.id.id);
     } catch (err) {
       return [];
@@ -331,6 +332,20 @@ export const useCesium = () => {
     state.timeline?.resize();
   }
 
+  function selectById(id: string) {
+    try {
+      if (!viewer) return;
+      if (!datasource) return;
+      const entity = datasource.entities.values.find(
+        (entity) => entity.id === id
+      );
+      if (!entity) return;
+      viewer.selectedEntity = entity;
+    } catch (err) {
+      console.warn(`[cesium] unable to select entity with the provided id`);
+    }
+  }
+
   return {
     viewer,
     init,
@@ -352,6 +367,7 @@ export const useCesium = () => {
     whenEntitySelected,
     createTimeline,
     refreshTimeline,
+    selectById,
     ...toRefs(state),
   };
 };
