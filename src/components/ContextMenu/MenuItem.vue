@@ -34,6 +34,7 @@ export default {
   <button
     class="hover:bg-gray-700 px-3 py-1 relative"
     @click="click?.()"
+    :disabled="disabled"
     ref="ele"
     @mouseenter="reveal = true"
     @mouseleave="reveal = false"
@@ -57,6 +58,10 @@ export default {
 
 .context-menu > button {
   @apply flex justify-start px-3 py-1 bg-gray-800;
+}
+
+.context-menu > button:disabled {
+  @apply text-gray-400;
 }
 
 .context-menu > button:hover {

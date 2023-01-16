@@ -40,18 +40,26 @@ function createCesiumContext(event: MouseEvent) {
   const entities = cesium.getPicked(cartesian);
   const cartographic = cesium.getCartographic(cartesian);
 
-  return [
+  const hasEntities = !!entities.length;
+
+  const items = [
     {
       id: "select",
       text: "Select",
       click: () => select(entities),
+      disabled: !hasEntities,
     },
     {
       id: "remove",
       text: "Remove",
       click: () => remove(entities),
+      disabled: !hasEntities,
     },
   ];
+
+  console.log(items);
+
+  return items;
 }
 </script>
 
