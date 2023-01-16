@@ -13,7 +13,7 @@ export default {
 
 <template>
   <teleport :to="anchor" v-if="items.length">
-    <div class="fixed inset-0" @click="close">
+    <div class="fixed inset-0 z-50" @click="close">
       <div class="context-menu" :style="styles">
         <menu-item v-for="item in items" :key="item.id" v-bind="item" />
       </div>
@@ -23,7 +23,7 @@ export default {
 
 <style scoped>
 .context-menu {
-  @apply fixed flex flex-col z-30 text-xs;
+  @apply fixed flex flex-col text-xs;
   @apply border border-gray-700;
   @apply bg-gray-900 rounded bg-opacity-10 text-white backdrop-blur-md shadow;
 }

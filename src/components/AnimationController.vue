@@ -7,19 +7,15 @@ import TheToolbar from "@/components/TheToolbar.vue";
 const cesium = useCesium();
 const { isPlaying, currentTime } = cesium;
 
-function showSpeedContext() {
-  const menu: AppMenuItem[] = [
-    { label: "1x", emits: "set-speed", value: 1 },
-    { label: "2x", emits: "set-speed", value: 2 },
-    { label: "5x", emits: "set-speed", value: 5 },
-    { label: "10x", emits: "set-speed", value: 10 },
-    { label: "20x", emits: "set-speed", value: 20 },
-    { label: "50x", emits: "set-speed", value: 50 },
-    { label: "100x", emits: "set-speed", value: 100 },
-  ];
-
-  window.electron.context(menu);
-}
+const playbackContext = [
+  { id: "1x", text: "1x", click: () => cesium.setSpeed(1) },
+  { id: "2x", text: "2x", click: () => cesium.setSpeed(2) },
+  { id: "5x", text: "5x", click: () => cesium.setSpeed(5) },
+  { id: "10x", text: "10x", click: () => cesium.setSpeed(10) },
+  { id: "20x", text: "20x", click: () => cesium.setSpeed(20) },
+  { id: "50x", text: "50x", click: () => cesium.setSpeed(50) },
+  { id: "100x", text: "100x", click: () => cesium.setSpeed(100) },
+];
 </script>
 
 <template>
@@ -39,7 +35,11 @@ function showSpeedContext() {
       <fa-icon icon="pause" class="mr-1" />
     </button>
     <button title="Playback Speed">
-      <fa-icon icon="gauge-high" @click="showSpeedContext" class="mr-1" />
+      <fa-icon
+        icon="gauge-high"
+        v-context="{ items: playbackContext, event: 'click' }"
+        class="mr-1"
+      />
     </button>
     <span class="focus:outline-none tabular-nums">
       {{ currentTime }}

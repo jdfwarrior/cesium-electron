@@ -22,12 +22,6 @@ onMounted(() => {
     cesium.process(data);
   });
 
-  window.electron.on("set-speed", (_: any, payload: any) => {
-    if ("value" in payload) {
-      cesium.setSpeed(payload.value);
-    }
-  });
-
   cesium.createTimeline("#timeline");
 });
 

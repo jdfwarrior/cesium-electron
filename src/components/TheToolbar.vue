@@ -15,7 +15,7 @@ const positionClasses = computed(() => {
   const classes: string[] = [];
 
   if (props.left || props.right || props.top || props.bottom) {
-    classes.push("absolute", "z-20");
+    classes.push("absolute", "z-10");
   }
 
   if (props.left) classes.push("justify-start", "left-3");
