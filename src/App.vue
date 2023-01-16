@@ -57,8 +57,6 @@ function createCesiumContext(event: MouseEvent) {
     },
   ];
 
-  console.log(items);
-
   return items;
 }
 </script>
