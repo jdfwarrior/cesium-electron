@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive, onMounted, onUnmounted } from "vue";
 import { useCesium } from "@/composition/useCesium";
-import type { Entity } from "cesium";
+import { debounce } from "@/composition/useDebounce";
 
 const { selected, process } = useCesium();
 
@@ -53,6 +53,18 @@ onUnmounted(() => {
   const { viewer } = useCesium();
   viewer?.clock.onTick.removeEventListener(positionWatcher);
 });
+
+const updateName = debounce((event: InputEvent) => {
+  if (!selected.value) return;
+
+  const target = event.target as HTMLInputElement;
+  const name = target.value;
+
+  const { id } = selected.value;
+
+  const cesium = useCesium();
+  cesium.process([{ id, name }]);
+}, 500);
 </script>
 
 <template>
@@ -69,7 +81,13 @@ onUnmounted(() => {
           <section class="section-rows">
             <div class="row">
               <label class="label">Name</label>
-              <span class="value">{{ selected?.name }}</span>
+              <span class="value">
+                <input
+                  type="text"
+                  :value="selected?.name"
+                  @input="updateName"
+                />
+              </span>
             </div>
             <div class="row">
               <label class="label">Latitude</label>
