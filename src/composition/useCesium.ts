@@ -46,9 +46,13 @@ const selectedEntityChangedCallbacks = new Set<
 const state = reactive<{
   selected: Entity | undefined;
   timeline: Timeline | undefined;
+  currentISO: string | undefined;
+  currentJulian: JulianDate | undefined;
 }>({
   selected: undefined,
   timeline: undefined,
+  currentISO: undefined,
+  currentJulian: undefined,
 });
 
 export const useCesium = () => {
@@ -99,7 +103,7 @@ export const useCesium = () => {
     );
   };
 
-  const process = (czml: any[]) => [datasource?.process(czml)];
+  const process = (czml: any[]) => datasource?.process(czml);
 
   /**
    * Gets and returns the current camera view and orientation so that it can be
@@ -219,6 +223,8 @@ export const useCesium = () => {
       if (!julian) return;
       const asDate = JulianDate.toDate(julian);
       currentTime.value = format(asDate, "MMM dd yyyy HH:mm:ss");
+      state.currentISO = asDate.toISOString();
+      state.currentJulian = julian;
     });
   }
 

@@ -2,6 +2,23 @@
 import { reactive, onMounted, onUnmounted } from "vue";
 import { useCesium } from "@/composition/useCesium";
 import { debounce } from "@/composition/useDebounce";
+import { throttle } from "@/utils/throttle";
+
+import BillboardOptions from "./Info/BillboardOptions.vue";
+import BoxOptions from "./Info/BoxOptions.vue";
+import CorridorOptions from "./Info/CorridorOptions.vue";
+import CylinderOptions from "./Info/CylinderOptions.vue";
+import EllipseOptions from "./Info/EllipseOptions.vue";
+import EllipsoidOptions from "./Info/EllipsoidOptions.vue";
+import LabelOptions from "./Info/LabelOptions.vue";
+import ModelOptions from "./Info/ModelOptions.vue";
+import PathOptions from "./Info/PathOptions.vue";
+import PointOptions from "./Info/PointOptions.vue";
+import PolygonOptions from "./Info/PolygonOptions.vue";
+import PolylineOptions from "./Info/PolylineOptions.vue";
+import PolylineVolumeOptions from "./Info/PolylineVolumeOptions.vue";
+import RectangleOptions from "./Info/RectangleOptions.vue";
+import WallOptions from "./Info/WallOptions.vue";
 
 const { selected, process } = useCesium();
 
@@ -30,6 +47,7 @@ function track() {
 }
 
 function positionWatcher() {
+  if (!selected.value) return;
   const { viewer, getCartographic } = useCesium();
   if (!viewer) return;
   const currentJulian = viewer?.clock.currentTime;
@@ -43,15 +61,16 @@ function positionWatcher() {
   state.longitude = longitude;
 }
 
+const throttlePosition = throttle(positionWatcher, 1000);
+
 onMounted(() => {
   const { viewer } = useCesium();
-  viewer?.clock.onTick.addEventListener(positionWatcher);
-  positionWatcher();
+  viewer?.clock.onTick.addEventListener(throttlePosition);
 });
 
 onUnmounted(() => {
   const { viewer } = useCesium();
-  viewer?.clock.onTick.removeEventListener(positionWatcher);
+  viewer?.clock.onTick.removeEventListener(throttlePosition);
 });
 
 const updateName = debounce((event: InputEvent) => {
@@ -71,9 +90,9 @@ const updateName = debounce((event: InputEvent) => {
   <teleport to="body">
     <transition name="info-panel">
       <div v-draggable class="info-panel">
-        <div class="px-2 py-1 flex justify-end items-center">
+        <header class="mb-5 px-2 flex justify-end space-x-3 py-1">
           <button type="button" class="" @click="close">&times;</button>
-        </div>
+        </header>
 
         <div class="h-full overflow-y-scroll">
           <h3 class="text-lg px-3 text-gray-800 font-bold">Entity Details</h3>
@@ -105,35 +124,21 @@ const updateName = debounce((event: InputEvent) => {
             <p>{{ selected?.description ?? "This item has no description" }}</p>
           </section>
 
-          <template v-if="selected?.billboard">
-            <h3 class="text-lg px-3 text-gray-800 font-bold">Billboard</h3>
-            <section class="section-rows">
-              <div class="row">
-                <label class="label">Scale</label>
-                <span class="value">{{ selected?.billboard?.scale }}</span>
-              </div>
-            </section>
-          </template>
-
-          <template v-if="selected?.cylinder">
-            <h3 class="text-lg px-3 text-gray-800 font-bold">Cylinder</h3>
-            <section class="section-rows">
-              <div class="row">
-                <label class="label">Top Radius (m)</label>
-                <span class="value">{{ selected?.cylinder?.topRadius }}</span>
-              </div>
-              <div class="row">
-                <label class="label">Bottom Radius (m)</label>
-                <span class="value">{{
-                  selected?.cylinder?.bottomRadius
-                }}</span>
-              </div>
-              <div class="row">
-                <label class="label">Length (m)</label>
-                <span class="value">{{ selected?.cylinder?.length }}</span>
-              </div>
-            </section>
-          </template>
+          <billboard-options :entity="selected" />
+          <box-options :entity="selected" />
+          <corridor-options :entity="selected" />
+          <cylinder-options :entity="selected" />
+          <ellipse-options :entity="selected" />
+          <ellipsoid-options :entity="selected" />
+          <label-options :entity="selected" />
+          <model-options :entity="selected" />
+          <path-options :entity="selected" />
+          <point-options :entity="selected" />
+          <polygon-options :entity="selected" />
+          <polyline-options :entity="selected" />
+          <polyline-volume-options :entity="selected" />
+          <rectangle-options :entity="selected" />
+          <wall-options :entity="selected" />
         </div>
 
         <footer class="mt-5 px-2 flex justify-end space-x-3 py-1">
@@ -166,25 +171,10 @@ const updateName = debounce((event: InputEvent) => {
   @apply h-2/3;
 }
 
-.info-panel section.section-rows {
-  @apply bg-white bg-opacity-40 backdrop-blur-md rounded shadow-lg;
+.info-panel header {
+  @apply bg-white bg-opacity-40 backdrop-blur-md rounded-t shadow;
   @apply text-gray-800;
-  @apply p-3 m-3;
-  @apply divide-y divide-gray-400;
-}
-
-.info-panel section.section-block {
-  @apply bg-white bg-opacity-40 backdrop-blur-md rounded shadow-lg;
-  @apply text-gray-800;
-  @apply p-3 m-3;
-}
-
-.info-panel section.section-block > p {
-  @apply py-3;
-}
-
-.info-panel section .row {
-  @apply flex justify-between items-center py-2;
+  @apply p-3;
 }
 
 .info-panel footer {

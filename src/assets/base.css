@@ -28,3 +28,24 @@ body {
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-400 rounded-full;
 }
+
+section.section-rows {
+  @apply bg-white bg-opacity-40 backdrop-blur-md rounded shadow-lg;
+  @apply text-gray-800;
+  @apply p-3 m-3;
+  @apply divide-y divide-gray-400;
+}
+
+section.section-block {
+  @apply bg-white bg-opacity-40 backdrop-blur-md rounded shadow-lg;
+  @apply text-gray-800;
+  @apply p-3 m-3;
+}
+
+section.section-block > p {
+  @apply py-3;
+}
+
+section .row {
+  @apply flex justify-between items-center py-2;
+}
