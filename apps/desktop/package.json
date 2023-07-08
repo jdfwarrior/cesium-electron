@@ -1,0 +1,23 @@
+{
+  "name": "@jdfwarrior/cesium-viewer-desktop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env cesiumenv=dev electron .",
+    "release:win": "electron-packager ./ --platform=win32 --arch=x64 --executable-name=\"Cesium Viewer\" --extra-resource ./dist --out ./release",
+    "release:mac": "electron-packager ./ --platform=darwin --arch=x64 --executable-name=\"Cesium Viewer\" --extra-resource ./dist --out ./release"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "electron": "^22.0.2",
+    "electron-packager": "^17.1.1"
+  }
+}
