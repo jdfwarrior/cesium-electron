@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCesium } from "@/composition/useCesium";
 import { useHotkey } from "@/composition/useHotkey";
-import VMenu from '@/components/VMenu.vue'
 import type { AppMenuItem } from "@/types/AppMenuItem";
 
 const cesium = useCesium();
