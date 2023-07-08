@@ -1,6 +1,6 @@
-const { app, BrowserWindow, ipcMain, Menu, MenuItem } = require("electron");
-const path = require("path");
-require("./express-server");
+import { app, BrowserWindow, ipcMain, Menu } from "electron";
+import path from "path";
+import "./express-server";
 
 app.commandLine.appendSwitch("ignore-gpu-blacklist");
 
@@ -65,7 +65,10 @@ const quit = () => {
   app.quit();
 };
 
-const context = (_, { menu, payload }) => {
+const context = (
+  _: Event,
+  { menu, payload }: { menu: any[]; payload: unknown[] }
+) => {
   const [win] = BrowserWindow.getAllWindows();
 
   const asMenuItems = menu.map((m) => {

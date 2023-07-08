@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "cross-env cesiumenv=dev electron .",
+    "compile": "tsc -w",
+    "start": "nodemon -w dist/ -x \"cross-env cesiumenv=dev electron dist/\"",
+    "dev": "run-p compile start",
     "release:win": "electron-packager ./ --platform=win32 --arch=x64 --executable-name=\"Cesium Viewer\" --extra-resource ./dist --out ./release",
     "release:mac": "electron-packager ./ --platform=darwin --arch=x64 --executable-name=\"Cesium Viewer\" --extra-resource ./dist --out ./release"
   },
@@ -16,8 +18,12 @@
     "express": "^4.18.2"
   },
   "devDependencies": {
+    "@types/express": "^4.17.17",
     "cross-env": "^7.0.3",
     "electron": "^22.0.2",
-    "electron-packager": "^17.1.1"
+    "electron-packager": "^17.1.1",
+    "nodemon": "^2.0.22",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.1.6"
   }
 }
