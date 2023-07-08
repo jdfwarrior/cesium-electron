@@ -11,6 +11,7 @@ import {
   Math as CMath,
   JulianDate,
   Timeline,
+  Ion
 } from "cesium";
 import type { Entity } from "cesium";
 import type { CameraAndOrientation, CesiumEvents } from "@/types/Cesium";
@@ -56,6 +57,8 @@ const state = reactive<{
 });
 
 export const useCesium = () => {
+  Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI0OGMxMDY0NS1jNTIwLTRlY2YtYmEzZC0wNGQ0NTIwMmJiM2QiLCJpZCI6ODUsImlhdCI6MTQ4ODIxMTU1MX0.2juwpEkrOcqCYu1j9kO_RvJOwRvdPqhCQiRA1AcSIOI"
+
   const init = (id: string) => {
     viewer = new Viewer(id, {
       navigationHelpButton: false,
