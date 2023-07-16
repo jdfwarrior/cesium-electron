@@ -17,7 +17,7 @@ const { selected, selectById } = cesium;
 onMounted(() => {
   cesium.init("cesium");
 
-  window?.electron?.on("czml", (_: any, data: any) => {
+  window?.api?.on("czml", (_: any, data: any) => {
     console.log(`received czml`, data);
     cesium.process(data);
   });

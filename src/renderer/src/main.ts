@@ -5,7 +5,7 @@ import { vContext } from "./directives/context";
 import { vDraggable } from "./directives/draggable";
 import { vHotkey } from "./directives/hotkey";
 import App from "./App.vue";
-import "../node_modules/cesium/Source/Widgets/widgets.css";
+import "cesium/Source/Widgets/widgets.css";
 import "./assets/base.css";
 window.CESIUM_BASE_URL = "./";
 
