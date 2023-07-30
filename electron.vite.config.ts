@@ -15,6 +15,9 @@ export default defineConfig({
         '@': resolve('src/renderer/src')
       }
     },
+    build: {
+      assetsDir: 'ui'
+    },
     plugins: [vue()]
   }
 })
