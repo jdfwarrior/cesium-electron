@@ -1,20 +1,27 @@
-import { createApp } from "vue";
-import { createPinia } from "pinia";
-import { FontAwesome } from "./plugins/fontawesome";
-import { vContext } from "./directives/context";
-import { vDraggable } from "./directives/draggable";
-import { vHotkey } from "./directives/hotkey";
-import App from "./App.vue";
-import "cesium/Source/Widgets/widgets.css";
-import "./assets/base.css";
-window.CESIUM_BASE_URL = "./";
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
+import { FontAwesome } from './plugins/fontawesome'
+import { vContext } from './directives/context'
+import { vDraggable } from './directives/draggable'
+import { vHotkey } from './directives/hotkey'
+import App from './App.vue'
+import 'cesium/Source/Widgets/widgets.css'
+import './assets/base.css'
 
-const app = createApp(App);
+declare global {
+  interface Window {
+    CESIUM_BASE_URL: string
+  }
+}
 
-app.use(createPinia());
-app.use(FontAwesome);
-app.use(vContext);
-app.use(vDraggable);
-app.use(vHotkey);
+window.CESIUM_BASE_URL = './'
 
-app.mount("#app");
+const app = createApp(App)
+
+app.use(createPinia())
+app.use(FontAwesome)
+app.use(vContext)
+app.use(vDraggable)
+app.use(vHotkey)
+
+app.mount('#app')

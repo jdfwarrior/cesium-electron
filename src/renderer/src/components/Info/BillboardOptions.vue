@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Entity } from "cesium";
-import { computed, ref } from "vue";
+import { computed } from "vue";
 import { hasBillboard } from "./info-helpers";
 import { useCesium } from "@/composition/useCesium";
 
@@ -30,7 +30,7 @@ function toggleShow() {
   viewer?.scene.render();
 }
 
-function updateScale(event: Event) {
+function updateScale(_: Event) {
   // if (!props.entity) return;
   // const target = event.target as HTMLInputElement;
   // if (!target) return;
@@ -62,14 +62,7 @@ scale.value;
       <div class="row">
         <label class="label">Scale</label>
         <span class="value">
-          <input
-            type="number"
-            min="1"
-            max="10"
-            :value="scale"
-            @input="updateScale"
-            @change="updateScale"
-          />
+          <input type="number" min="1" max="10" :value="scale" @input="updateScale" @change="updateScale" />
         </span>
       </div>
     </section>

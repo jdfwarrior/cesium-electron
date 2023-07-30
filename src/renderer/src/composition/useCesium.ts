@@ -135,6 +135,7 @@ export const useCesium = () => {
     if (!viewer) throw new Error(`No viewer instance available`)
 
     try {
+      // @ts-ignore ignoring this for now until I figure out the best way to handle it
       viewer.camera.flyTo(location)
     } catch (err) {
       console.warn(`Unable to fly to the requested coordinates and orientation`)
@@ -313,7 +314,7 @@ export const useCesium = () => {
    * @param entity the entity that matches the provided czml packet
    * @param packet the czml packet being processed
    */
-  function addModified(entity: Entity & { modified?: string }, packet: any) {
+  function addModified(entity: Entity & { modified?: string }, _: any) {
     if (!entity?.modified) entity.addProperty('modified')
     entity.modified = new Date().toISOString()
   }

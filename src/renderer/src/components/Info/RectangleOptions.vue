@@ -2,7 +2,7 @@
 import type { Entity } from "cesium";
 import { hasRectangle } from "./info-helpers";
 
-const props = defineProps<{ entity: Entity | undefined }>();
+defineProps<{ entity: Entity | undefined }>();
 </script>
 
 <template>

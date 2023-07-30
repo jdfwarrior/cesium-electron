@@ -10,13 +10,14 @@ import TopLeftToolbar from "./components/TopLeftToolbar.vue";
 import TopRightToolbar from "./components/TopRightToolbar.vue";
 import MouseTracker from "./components/MouseTracker.vue";
 import { Cartesian2 } from "cesium";
+import type { CameraAndOrientation } from '@/types/Cesium'
 
 const cesium = useCesium();
 const { selected, selectById } = cesium;
 
 onMounted(async () => {
   cesium.init("cesium");
-  const defaultCamera = await window.api?.get('app.defaultCamera')
+  const defaultCamera = await window.api?.get('app.defaultCamera') as CameraAndOrientation | undefined
 
   if (defaultCamera) {
     cesium.setCamera(defaultCamera)
@@ -49,7 +50,7 @@ function select(entities: string[]): void {
 function createCesiumContext(event: MouseEvent) {
   const cartesian = new Cartesian2(event.clientX, event.clientY);
   const entities = cesium.getPicked(cartesian);
-  const cartographic = cesium.getCartographic(cartesian);
+  // const cartographic = cesium.getCartographic(cartesian);
 
   const hasEntities = !!entities.length;
 

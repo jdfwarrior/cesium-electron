@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { useCesium } from "@/composition/useCesium";
 import { useHotkey } from "@/composition/useHotkey";
-import type { AppMenuItem } from "@/types/AppMenuItem";
 
 const cesium = useCesium();
 
@@ -9,37 +8,18 @@ useHotkey("Ctrl + H", cesium.home);
 useHotkey("Ctrl + Backspace", cesium.clear);
 
 function onMinimize() {
-  if (!window?.electron) return;
-  window.electron.minimize();
+  if (!window?.api) return;
+  window.api.minimize();
 }
 
 function onMaximize() {
-  if (!window?.electron) return;
-  window.electron.maximize();
+  if (!window?.api) return;
+  window.api.maximize();
 }
 
 function onExit() {
-  if (!window?.electron) return;
-  window.electron.exit();
-}
-
-function log() {
-  console.log('got it')
-}
-
-function showFileMenu() {
-  const contextmenu: AppMenuItem[] = [
-    { label: 'Open File(s)' },
-    { type: 'separator' },
-    { label: 'Save' },
-    { label: 'Save As' },
-    { type: 'separator' },
-    { label: 'Close' },
-    { type: 'separator' },
-    { label: 'Quit' },
-  ];
-
-  window.electron.context(contextmenu);
+  if (!window?.api) return;
+  window.api.exit();
 }
 </script>
 

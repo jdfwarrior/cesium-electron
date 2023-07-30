@@ -13,6 +13,6 @@ interface ElectronApi {
 
 export declare global {
   interface Window {
-    electron: ElectronApi
+    api: ElectronApi
   }
 }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { useCesium } from "@/composition/useCesium";
-import type { AppMenuItem } from "@/types/AppMenuItem";
 
 import TheToolbar from "@/components/TheToolbar.vue";
 
@@ -20,26 +19,14 @@ const playbackContext = [
 
 <template>
   <the-toolbar>
-    <button
-      :disabled="isPlaying"
-      @click="cesium.play"
-      title="Play the loaded animation"
-    >
+    <button :disabled="isPlaying" @click="cesium.play" title="Play the loaded animation">
       <fa-icon icon="play" class="mr-1" />
     </button>
-    <button
-      :disabled="!isPlaying"
-      @click="cesium.pause"
-      title="Pause the currently playing animation"
-    >
+    <button :disabled="!isPlaying" @click="cesium.pause" title="Pause the currently playing animation">
       <fa-icon icon="pause" class="mr-1" />
     </button>
     <button title="Playback Speed">
-      <fa-icon
-        icon="gauge-high"
-        v-context="{ items: playbackContext, event: 'click' }"
-        class="mr-1"
-      />
+      <fa-icon icon="gauge-high" v-context="{ items: playbackContext, event: 'click' }" class="mr-1" />
     </button>
     <span class="focus:outline-none tabular-nums">
       {{ currentTime }}
