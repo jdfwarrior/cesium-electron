@@ -14,23 +14,34 @@ import { Cartesian2 } from "cesium";
 const cesium = useCesium();
 const { selected, selectById } = cesium;
 
-onMounted(() => {
+onMounted(async () => {
   cesium.init("cesium");
+  const defaultCamera = await window.api?.get('app.defaultCamera')
+
+  if (defaultCamera) {
+    cesium.setCamera(defaultCamera)
+  }
 
   window?.api?.on("czml", (_: any, data: any) => {
     console.log(`received czml`, data);
     cesium.process(data);
   });
 
+  window?.api?.on('save-current-view', () => {
+    console.log('got request to save this view')
+    const view = cesium.getCamera()
+    window?.api?.set('app.defaultCamera', view)
+  })
+
   cesium.createTimeline("#timeline");
 });
 
-function remove(entities: string[]) {
+function remove(entities: string[]): void {
   const czml = entities.map((id: string) => ({ id, delete: true }));
   cesium.process(czml);
 }
 
-function select(entities: string[]) {
+function select(entities: string[]): void {
   const [entity] = entities;
   if (entity) selectById(entity);
 }
@@ -47,14 +58,14 @@ function createCesiumContext(event: MouseEvent) {
       id: "select",
       text: "Select",
       click: () => select(entities),
-      disabled: !hasEntities,
+      disabled: !hasEntities
     },
     {
       id: "remove",
       text: "Remove",
       click: () => remove(entities),
-      disabled: !hasEntities,
-    },
+      disabled: !hasEntities
+    }
   ];
 
   return items;
@@ -72,9 +83,7 @@ function createCesiumContext(event: MouseEvent) {
   <info-panel v-if="selected" />
   <contextual-menu />
 
-  <div
-    class="flex justify-start items-center absolute bottom-3 space-x-3 left-3 right-3 h-6"
-  >
+  <div class="flex justify-start items-center absolute bottom-3 space-x-3 left-3 right-3 h-6">
     <div><animation-controller /></div>
     <div id="timeline" class="grow cesium-viewer-timelineContainer"></div>
     <div><mouse-tracker /></div>

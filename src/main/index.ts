@@ -2,29 +2,62 @@ import { app, shell, BrowserWindow, Menu, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import "./express-server";
+import localshortcut from 'electron-localshortcut'
+import settings from 'electron-settings'
+import './express-server'
 
-app.commandLine.appendSwitch("ignore-gpu-blacklist");
+app.commandLine.appendSwitch('ignore-gpu-blacklist')
 
-function createWindow(): void {
+interface WindowStateCache {
+  x?: number
+  y?: number
+  width: number
+  height: number
+  devtools?: boolean
+}
+
+async function createWindow() {
+  let windowState: WindowStateCache = { width: 900, height: 670 }
+  const hasCachedDimensions = await settings.has('window')
+
+  if (hasCachedDimensions) {
+    const cached = (await settings.get(['window'])) as object
+    windowState = { ...windowState, ...cached }
+  }
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    width: windowState.width,
+    height: windowState.height,
+    x: windowState.x,
+    y: windowState.y,
     show: false,
     autoHideMenuBar: true,
     frame: false,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
+      sandbox: false
     }
   })
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
-
+    if (windowState.devtools) mainWindow.webContents.openDevTools()
   })
+
+  async function cacheWindowState() {
+    const bounds = mainWindow.getBounds()
+    const devtools = mainWindow.webContents.isDevToolsOpened()
+
+    await settings.set('window', { ...bounds, devtools })
+    console.log('cached window state updated')
+  }
+
+  mainWindow.on('resized', () => cacheWindowState())
+  mainWindow.on('moved', () => cacheWindowState())
+  mainWindow.webContents.on('devtools-opened', () => cacheWindowState())
+  mainWindow.webContents.on('devtools-closed', () => cacheWindowState())
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
@@ -38,6 +71,10 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
   }
+
+  localshortcut.register(mainWindow, 'Ctrl+Shift+S', () => {
+    mainWindow.webContents.send('save-current-view')
+  })
 }
 
 // This method will be called when Electron has finished
@@ -75,53 +112,63 @@ app.on('window-all-closed', () => {
 // In this file you can include the rest of your app"s specific main process
 // code. You can also put them in separate files and require them here.
 
-
 const getwindow = () => {
   try {
-    const [win] = BrowserWindow.getAllWindows();
-    return win;
+    const [win] = BrowserWindow.getAllWindows()
+    return win
   } catch (err) {
-    return undefined;
+    return undefined
   }
-};
+}
 
 const minimize = () => {
-  const win = getwindow();
-  if (win) win.minimize();
-};
+  const win = getwindow()
+  if (win) win.minimize()
+}
 
 const maximize = () => {
-  const win = getwindow();
-  if (win && win.isMaximized()) win.unmaximize();
-  else if (win && !win.isMaximized()) win.maximize();
-};
+  const win = getwindow()
+  if (win && win.isMaximized()) win.unmaximize()
+  else if (win && !win.isMaximized()) win.maximize()
+}
 
 const restore = () => {
-  const win = getwindow();
-  if (win) win.restore();
-};
+  const win = getwindow()
+  if (win) win.restore()
+}
 
 const quit = () => {
-  app.quit();
-};
+  app.quit()
+}
 
 const context = (_, { menu, payload }) => {
-  const [win] = BrowserWindow.getAllWindows();
+  const [win] = BrowserWindow.getAllWindows()
 
   const asMenuItems = menu.map((m) => {
-    const { emits, value, ...item } = m;
+    const { emits, value, ...item } = m
     return {
       ...item,
-      click: () => win.webContents.send(emits, { ...payload, value }),
-    };
-  });
+      click: () => win.webContents.send(emits, { ...payload, value })
+    }
+  })
 
-  const m = Menu.buildFromTemplate(asMenuItems);
-  m.popup({});
-};
+  const m = Menu.buildFromTemplate(asMenuItems)
+  m.popup({})
+}
 
-ipcMain.handle("minimize", minimize);
-ipcMain.handle("maximize", maximize);
-ipcMain.handle("restore", restore);
-ipcMain.handle("exit", quit);
-ipcMain.handle("context", context);
+async function set(_, { key, value }) {
+  await settings.set(key, value)
+  console.log(`cached new value for key: ${key}`)
+}
+
+async function get(_, key: string) {
+  return await settings.get(key)
+}
+
+ipcMain.handle('minimize', minimize)
+ipcMain.handle('maximize', maximize)
+ipcMain.handle('restore', restore)
+ipcMain.handle('exit', quit)
+ipcMain.handle('context', context)
+ipcMain.handle('set', set)
+ipcMain.handle('get', get)
