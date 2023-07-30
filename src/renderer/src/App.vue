@@ -71,6 +71,18 @@ function createCesiumContext(event: MouseEvent) {
 
   return items;
 }
+
+async function onDrop(event: DragEvent) {
+  const files = event.dataTransfer?.files
+  if (!files) return
+
+  const paths = Array.from(files).map(file => file.path)
+  const result = await window.api.parse(paths)
+
+  if (result.length) {
+    cesium.process(result)
+  }
+}
 </script>
 
 <template>
@@ -79,7 +91,7 @@ function createCesiumContext(event: MouseEvent) {
   <top-left-toolbar />
   <top-right-toolbar />
 
-  <div id="cesium" v-context="{ items: createCesiumContext }"></div>
+  <div id="cesium" v-context="{ items: createCesiumContext }" @dragover.prevent.stop @drop="onDrop"></div>
 
   <info-panel v-if="selected" />
   <contextual-menu />

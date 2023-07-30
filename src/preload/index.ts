@@ -10,7 +10,8 @@ const api = {
   exit: () => ipcRenderer.invoke('exit'),
   context: (menu, payload) => ipcRenderer.invoke('context', { menu, payload }),
   set: (key: string, value: unknown) => ipcRenderer.invoke('set', { key, value }),
-  get: (key: string) => ipcRenderer.invoke('get', key)
+  get: (key: string) => ipcRenderer.invoke('get', key),
+  parse: async (paths: string[]) => await ipcRenderer.invoke('parse', paths)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

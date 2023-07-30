@@ -9,6 +9,7 @@ interface ElectronApi {
   context: (menu: AppMenuItem[], payload?: any) => void
   set: (key: string, value: unknown) => void
   get: (key: string) => Promise<unknown>
+  parse: (paths: string[]) => Promise<unknonwn>
 }
 
 export declare global {
