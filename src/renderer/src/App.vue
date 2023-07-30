@@ -9,6 +9,7 @@ import AnimationController from "./components/AnimationController.vue";
 import TopLeftToolbar from "./components/TopLeftToolbar.vue";
 import TopRightToolbar from "./components/TopRightToolbar.vue";
 import MouseTracker from "./components/MouseTracker.vue";
+import ToastList from "./components/ToastList.vue";
 import { Cartesian2 } from "cesium";
 import type { CameraAndOrientation } from '@/types/Cesium'
 
@@ -89,6 +90,7 @@ async function onDrop(event: DragEvent) {
   <the-header />
 
   <top-left-toolbar />
+  <toast-list />
   <top-right-toolbar />
 
   <div id="cesium" v-context="{ items: createCesiumContext }" @dragover.prevent.stop @drop="onDrop"></div>
