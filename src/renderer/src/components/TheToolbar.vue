@@ -20,6 +20,7 @@ const positionClasses = computed(() => {
 
   if (props.left) classes.push("justify-start", "left-3");
   if (props.right) classes.push("justify-end", "right-3");
+  if (props.center) classes.push('justify-center', 'left-1/2', '-translate-x-1/2')
   if (props.top) classes.push("top-10");
   if (props.bottom) classes.push("bottom-10");
 
@@ -41,7 +42,7 @@ const positionClasses = computed(() => {
   @apply bg-gray-900 py-1 px-2 rounded-full bg-opacity-10 backdrop-blur-md;
   @apply shadow border border-gray-700;
   @apply text-gray-200;
-  @apply select-none text-xs;
+  @apply select-none text-xs z-10;
 }
 
 .toolbar :deep(button) {
