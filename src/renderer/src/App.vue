@@ -10,6 +10,7 @@ import TopLeftToolbar from "./components/TopLeftToolbar.vue";
 import TopRightToolbar from "./components/TopRightToolbar.vue";
 import MouseTracker from "./components/MouseTracker.vue";
 import ToastList from "./components/ToastList.vue";
+import ProgressIndicator from './components/ProgressIndicator.vue'
 import { Cartesian2 } from "cesium";
 import type { CameraAndOrientation } from '@/types/Cesium'
 
@@ -88,6 +89,7 @@ async function onDrop(event: DragEvent) {
 
 <template>
   <the-header />
+  <progress-indicator />
 
   <top-left-toolbar />
   <toast-list />
