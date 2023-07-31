@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useCesium } from "./composition/useCesium";
+import { useProgress } from "./composition/useProgress";
 
 import TheHeader from "./components/TheHeader.vue";
 import InfoPanel from "./components/InfoPanel.vue";
@@ -16,6 +17,7 @@ import type { CameraAndOrientation } from '@/types/Cesium'
 
 const cesium = useCesium();
 const { selected, selectById } = cesium;
+const progress = useProgress()
 
 onMounted(async () => {
   cesium.init("cesium");
@@ -34,6 +36,15 @@ onMounted(async () => {
     console.log('got request to save this view')
     const view = cesium.getCamera()
     window?.api?.set('app.defaultCamera', view)
+  })
+
+  window?.api?.on('set-progress-total', (_, count) => {
+    console.log(`setting progress total to ${count}`)
+    progress.setTotal(count)
+  })
+  window?.api?.on('load', (_, data) => {
+    progress.increment()
+    cesium.process(data)
   })
 
   cesium.createTimeline("#timeline");
@@ -78,12 +89,9 @@ async function onDrop(event: DragEvent) {
   const files = event.dataTransfer?.files
   if (!files) return
 
+  progress.setTotal(files.length)
   const paths = Array.from(files).map(file => file.path)
-  const result = await window.api.parse(paths)
-
-  if (result.length) {
-    cesium.process(result)
-  }
+  window.api.parse(paths)
 }
 </script>
 

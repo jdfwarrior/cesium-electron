@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import { useProgress } from '@/composition/useProgress'
 const { percent } = useProgress()
-
-const another = useProgress()
-console.log(another)
 </script>
 
 <template>

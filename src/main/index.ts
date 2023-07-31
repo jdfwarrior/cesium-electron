@@ -168,40 +168,34 @@ async function get(_, key: string) {
 }
 
 async function parse(_, paths: string[]) {
-  let processed = 0
-  const packets: unknown[] = []
-
   // filter out file extensions that we don't support
   const validPaths = paths.filter((path) => /\.(json|czml)$/.test(path))
+  if (!validPaths) return
 
-  // if there were no valid file types, return an empty data set
-  if (!validPaths.length) return packets
+  const win = getwindow()
+  win?.webContents.send('set-progress-total', validPaths.length)
 
-  return new Promise((resolve) => {
-    for (let i = 0; i < validPaths.length; i++) {
-      try {
-        const filePath = validPaths[i]
-        const stream = createReadStream(filePath).pipe(JSONStream.parse('*'))
+  for (let i = 0; i < validPaths.length; i++) {
+    try {
+      const packets: unknown[] = []
+      const filePath = validPaths[i]
+      const stream = createReadStream(filePath).pipe(JSONStream.parse('*'))
 
-        // TODO Probably need some kind of timeout that will close the stream if it doesn't automatically
-        // close after a certain amount of time. In that case, it would be safe to assume that something failed.
+      // TODO Probably need some kind of timeout that will close the stream if it doesn't automatically
+      // close after a certain amount of time. In that case, it would be safe to assume that something failed.
 
-        stream.on('data', (data) => {
-          if (data.czml) {
-            packets.push(...data.czml)
-          } else packets.push(data)
-        })
+      stream.on('data', (data) => {
+        if (data.czml) {
+          packets.push(...data.czml)
+        } else packets.push(data)
+      })
 
-        stream.on('close', () => {
-          console.log(`finished parsing ${filePath}`)
-          processed++
-          if (processed === validPaths.length) resolve(packets)
-        })
-      } catch {
-        processed++
-      }
-    }
-  })
+      stream.on('close', () => {
+        console.log(`finished parsing ${filePath}`)
+        win?.webContents.send('load', packets)
+      })
+    } catch {}
+  }
 }
 
 ipcMain.handle('minimize', minimize)

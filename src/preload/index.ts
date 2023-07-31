@@ -4,6 +4,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 // Custom APIs for renderer
 const api = {
   on: (event, callback) => ipcRenderer.on(event, callback),
+  off: (event, callback) => ipcRenderer.off(event, callback),
   minimize: () => ipcRenderer.invoke('minimize'),
   maximize: () => ipcRenderer.invoke('maximize'),
   restore: () => ipcRenderer.invoke('restore'),
@@ -11,7 +12,7 @@ const api = {
   context: (menu, payload) => ipcRenderer.invoke('context', { menu, payload }),
   set: (key: string, value: unknown) => ipcRenderer.invoke('set', { key, value }),
   get: (key: string) => ipcRenderer.invoke('get', key),
-  parse: async (paths: string[]) => await ipcRenderer.invoke('parse', paths)
+  parse: (paths: string[]) => ipcRenderer.invoke('parse', paths)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
