@@ -143,19 +143,40 @@ const quit = () => {
   app.quit()
 }
 
-const context = (_, { menu, payload }) => {
-  const [win] = BrowserWindow.getAllWindows()
+function toMenuItem(item) {
+  const { callback, ...options } = item
 
-  const asMenuItems = menu.map((m) => {
-    const { emits, value, ...item } = m
-    return {
-      ...item,
-      click: () => win.webContents.send(emits, { ...payload, value })
+  if (options.submenu) {
+    options.submenu = options.submenu.map((submenu) => toMenuItem(submenu))
+  }
+
+  if (callback && callback.context === 'main') {
+    const win = getwindow()
+    options.click = () => {
+      console.log(`sending ${callback.event} back to renderer`)
+      win?.webContents.send(callback.event, callback.payload)
     }
-  })
+  } else if (callback && callback.context === 'renderer') {
+    const win = getwindow()
+    options.click = () => {
+      console.log(`sending ${callback.event} back to renderer`)
+      win?.webContents.send(callback.event, callback.payload)
+    }
+  }
 
-  const m = Menu.buildFromTemplate(asMenuItems)
-  m.popup({})
+  const menuitem = options
+  return menuitem
+}
+
+const context = (_, { menu, options }) => {
+  const win = getwindow()
+  const items = menu.map(toMenuItem)
+  const m = Menu.buildFromTemplate(items)
+
+  if (options?.x >= 0) options.x = ~~options.x
+  if (options?.y >= 0) options.y = ~~options.y
+
+  m.popup({ window: win, ...options })
 }
 
 async function set(_, { key, value }) {

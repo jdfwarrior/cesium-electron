@@ -42,9 +42,14 @@ onMounted(async () => {
     console.log(`setting progress total to ${count}`)
     progress.setTotal(count)
   })
+
   window?.api?.on('load', (_, data) => {
     progress.increment()
     cesium.process(data)
+  })
+
+  window?.api?.on('openfile', (_, data) => {
+    console.log('received open file with this payload', data)
   })
 
   cesium.createTimeline("#timeline");
@@ -129,6 +134,7 @@ async function onDrop(event: DragEvent) {
 
 #cesium {
   top: 0px;
+  z-index: 0;
 }
 
 .cesium-viewer-bottom {

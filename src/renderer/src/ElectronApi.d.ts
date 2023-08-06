@@ -7,7 +7,7 @@ interface ElectronApi {
   maximize: () => void
   restore: () => void
   exit: () => void
-  context: (menu: AppMenuItem[], payload?: any) => void
+  context: (menu: AppMenuItem[], options: unknown) => void
   set: (key: string, value: unknown) => void
   get: (key: string) => Promise<unknown>
   parse: (paths: string[]) => void
