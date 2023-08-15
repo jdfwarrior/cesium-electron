@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 
-onMounted(() => {
-    document.addEventListener('keydown', (event: KeyboardEvent) => {
-        if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'k') {
-            const ele = document.querySelector('#command-palette') as HTMLDialogElement
-            if (ele) ele.showModal()
+function handleKeydown(event: KeyboardEvent) {
+    if (event.metaKey && event.shiftKey && event.key.toLowerCase() === 'k') {
+        const ele = document.querySelector('#command-palette') as HTMLDialogElement
+        if (ele && !ele.open) ele.showModal()
+    }
+}
 
-        }
-    })
+onMounted(() => {
+    document.addEventListener('keydown', handleKeydown)
 })
 
 function hide() {
