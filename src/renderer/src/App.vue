@@ -154,10 +154,6 @@ async function onDrop(event: DragEvent) {
   width: auto;
 }
 
-.cesium-timeline-icon16 {
-  background-image: url("/timeline-marker.png") !important;
-}
-
 .cesium-timeline-main {
   @apply bg-gray-900 bg-opacity-0 backdrop-blur-sm text-white h-6;
   transition: all 0.3s ease-in;
