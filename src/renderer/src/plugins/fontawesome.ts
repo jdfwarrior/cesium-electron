@@ -1,5 +1,5 @@
-import type { App, Plugin } from "vue";
-import { library } from "@fortawesome/fontawesome-svg-core";
+import type { App, Plugin } from 'vue'
+import { library } from '@fortawesome/fontawesome-svg-core'
 import {
   faArrowPointer,
   faGaugeHigh,
@@ -10,8 +10,9 @@ import {
   faTrashCan,
   faLock,
   faChevronDown,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+  faMagnifyingGlass
+} from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 library.add(
   faArrowPointer,
@@ -22,11 +23,12 @@ library.add(
   faArrowRotateLeft,
   faTrashCan,
   faLock,
-  faChevronDown
-);
+  faChevronDown,
+  faMagnifyingGlass
+)
 
 export const FontAwesome: Plugin = {
   install(app: App) {
-    app.component("fa-icon", FontAwesomeIcon);
-  },
-};
+    app.component('fa-icon', FontAwesomeIcon)
+  }
+}
