@@ -25,10 +25,10 @@ function onExit() {
 
 function onFileClick(event: MouseEvent) {
   const menu: MenuItem[] = [
-    { type: 'normal', label: 'Open', callback: { context: 'renderer', event: 'openfile', payload: 500 } },
-    { type: 'normal', label: 'Open' },
+    { type: 'normal', label: 'Open File', accelerator: 'Ctrl+O', callback: { event: 'openfile' } },
+    { type: 'normal', label: 'Open Directory', accelerator: 'Ctrl+Shift+O', callback: { event: 'opendirectory' } },
     { type: 'separator' },
-    { type: 'normal', label: 'Quit', callback: { context: 'main', event: 'quit' } }
+    { type: 'normal', label: 'Quit', accelerator: 'Ctrl+Q', callback: { event: 'quit' } }
   ]
 
   const { target } = event

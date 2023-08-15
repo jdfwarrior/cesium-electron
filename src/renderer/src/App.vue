@@ -48,8 +48,9 @@ onMounted(async () => {
     cesium.process(data)
   })
 
-  window?.api?.on('openfile', (_, data) => {
-    console.log('received open file with this payload', data)
+  window?.api?.on('openfile', async () => {
+    const files = await window.dialogs.open()
+    window.api.parse(files)
   })
 
   cesium.createTimeline("#timeline");

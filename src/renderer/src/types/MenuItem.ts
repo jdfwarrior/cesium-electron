@@ -50,7 +50,6 @@ type MenuItemRole =
 type MenuItemType = 'normal' | 'separator' | 'submenu' | 'checkbox' | 'radio'
 
 interface MenuCallbackType {
-  context: 'main' | 'renderer'
   event: string
   payload?: unknown
 }

@@ -13,8 +13,13 @@ interface ElectronApi {
   parse: (paths: string[]) => void
 }
 
+interface DialogsApi {
+  open: (options?: unknown) => Promise<string[]>
+}
+
 export declare global {
   interface Window {
     api: ElectronApi
+    dialogs: DialogsApi
   }
 }

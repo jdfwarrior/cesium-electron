@@ -1,4 +1,4 @@
-import { app, shell, BrowserWindow, Menu, ipcMain } from 'electron'
+import { app, shell, BrowserWindow, Menu, ipcMain, dialog } from 'electron'
 import { join } from 'path'
 import { createReadStream } from 'fs'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
@@ -150,18 +150,10 @@ function toMenuItem(item) {
     options.submenu = options.submenu.map((submenu) => toMenuItem(submenu))
   }
 
-  if (callback && callback.context === 'main') {
-    const win = getwindow()
-    options.click = () => {
-      console.log(`sending ${callback.event} back to renderer`)
-      win?.webContents.send(callback.event, callback.payload)
-    }
-  } else if (callback && callback.context === 'renderer') {
-    const win = getwindow()
-    options.click = () => {
-      console.log(`sending ${callback.event} back to renderer`)
-      win?.webContents.send(callback.event, callback.payload)
-    }
+  const win = getwindow()
+  options.click = () => {
+    console.log(`sending ${callback.event} back to renderer`)
+    win?.webContents.send(callback.event, callback.payload)
   }
 
   const menuitem = options
@@ -227,3 +219,17 @@ ipcMain.handle('context', context)
 ipcMain.handle('set', set)
 ipcMain.handle('get', get)
 ipcMain.handle('parse', parse)
+
+ipcMain.handle('dialogs:open', async (_, options = {}) => {
+  const win = getwindow()!
+
+  const defaults = {
+    properties: ['multiSelections'],
+    filters: [{ name: 'CZML', extensions: ['czml'] }]
+  }
+
+  const config = { ...defaults, ...options }
+
+  const files = await dialog.showOpenDialog(win, config)
+  return files.filePaths
+})
