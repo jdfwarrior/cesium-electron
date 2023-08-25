@@ -99,7 +99,10 @@ export const useCesium = () => {
     })
   }
 
-  const process = (czml: any[]) => datasource?.process(czml)
+  const process = (czml: any[]) => {
+    datasource?.process(czml)
+    refreshTimeline()
+  }
 
   /**
    * Gets and returns the current camera view and orientation so that it can be
@@ -332,11 +335,24 @@ export const useCesium = () => {
     if (!viewer) return
     state.timeline = new Timeline(ele, viewer?.clock)
 
+    function onTimelineScrubfunction(e) {
+      const clock = e.clock
+      clock.currentTime = e.timeJulian
+    }
+
+    // @ts-ignore This shows that addEventListener doesn't exist on the timeline but this code was copied directly from how Cesium's initializes the default one.
+    state.timeline.addEventListener('settime', onTimelineScrubfunction, false)
+    state.timeline.zoomTo(viewer?.clock.startTime, viewer?.clock.stopTime)
+
     window.addEventListener('resize', refreshTimeline)
+
+    setTimeout(refreshTimeline, 100)
   }
 
   function refreshTimeline() {
+    if (!viewer) return
     state.timeline?.resize()
+    state.timeline?.zoomTo(viewer?.clock.startTime, viewer?.clock.stopTime)
   }
 
   function selectById(id: string) {
